@@ -22,9 +22,13 @@ It's based off of the source of another launcher: Doomie.
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
 # CREDITS
-- YADL is a fork of Doomie 1.6 by buja-buja: https://forum.zdoom.org/viewtopic.php?f=44&t=61647
-- Original Doomie can be downloaded at: http://www.mediafire.com/file/oozoqoer362o6rq/Doomie+Release+1.7.zip
-- Original Doomie 1.6 source can be downloaded at: http://www.mediafire.com/file/o8ssed5gvumyamz/Doomie_Source_1.6.7z
+YADL is a fork of Doomie 1.6 by buja-buja: https://forum.zdoom.org/viewtopic.php?f=44&t=61647
+  - Original Doomie can be downloaded at: http://www.mediafire.com/file/oozoqoer362o6rq/Doomie+Release+1.7.zip
+  - Original Doomie 1.6 source can be downloaded at: http://www.mediafire.com/file/o8ssed5gvumyamz/Doomie_Source_1.6.7z
+
+YADL also uses two libraries:
+- Extended WPF Toolkit: https://github.com/xceedsoftware/wpftoolkit
+- GongSolutions.WPF.DragDrop: https://github.com/punker76/gong-wpf-dragdrop
 
 # License
 100% Freeware. 95% of this project is buja-buja's work. So, abide by their own rules first and foremost:
