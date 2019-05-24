@@ -11,7 +11,7 @@ It's based off of the source of another launcher: Doomie.
   - Can reorder Categories via the tabs
     - Removing playlists is not yet added... (but can be done via config editing)
 - Allows hiding of Load/Merge/Location fields in PWAD list.
-  - These will be saved to the program's config file
+  - Settings are saved to the program's config file
 - Wads can be loaded/unloaded by double-clicking them.
 - Wads can also be loaded/unloaded by pressing the spacebar or enter key while selected (useful for loading/unloading groups of items)
 - Text indicates the status of the Pwad:
