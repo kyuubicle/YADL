@@ -21,7 +21,7 @@ It's based off of the source of another launcher: Doomie.
   -	Uses a Menu instead of buttons for basic Playlist controls
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
-# TODO:
+# TODO
 - [ ] Remember last category/playlist on startup
 - [ ] Removing Categories.
 - [ ] Better looking Category creation screen
