@@ -1,6 +1,3 @@
-# YADL
-Yet Another Doom Launcher
-
 # What is this?
 It's... well, yet another doom launcher. YADL. Yeah. *ahem*
 
