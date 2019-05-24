@@ -1,0 +1,107 @@
+﻿<Window x:Class="YADL.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:YADL" mc:Ignorable="d"
+        Title="About" 
+        Height="320" 
+        Width="320"
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterOwner">
+
+    <Grid Margin="6">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Image 
+        Source="Doomie.ico" Width="32" Grid.Column="0" Grid.Row="0"/>
+        
+        <Label 
+        Content="Yet Another Doom Launcher" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+        <Label 
+        Content="Based on Doomie 1.6" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+
+        <Label 
+        Content="A simple frontend launcher for id Tech 1 source ports." Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+        <TabControl Grid.Row="3" Margin="0 6 0 0">
+            <TabItem Header="Information">
+                <Grid Margin="6">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition/>
+
+                    </Grid.RowDefinitions>
+                    
+                    <Label 
+                    Content="Version 1.8" FontWeight="Bold" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+                    <Label 
+                    Content="Doomie written by buja-buja in 2018" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <Label 
+                    Content="Modified by kyuubicle in 2019" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <Label 
+                    Content="Icon artwork by NightFright" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    Uses
+                        <Hyperlink 
+                        NavigateUri="https://github.com/punker76/gong-wpf-dragdrop" 
+                        RequestNavigate="Hyperlink_RequestNavigate">
+                        GongSolutions.WPF.DragDrop
+                        </Hyperlink>
+                    <LineBreak/>
+                        and
+                        <Hyperlink NavigateUri="https://github.com/xceedsoftware/wpftoolkit" RequestNavigate="Hyperlink_RequestNavigate">Extended WPF Toolkit</Hyperlink>
+                        libraries
+                    </TextBlock>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Version log">
+                <ScrollViewer>
+                    
+                    <StackPanel Orientation="Vertical" Margin="6 0 6 6">
+                        <Expander IsExpanded="true" Header="Version 1.1 (05/09/2018)" FontWeight="Bold" Margin="0 6 0 0">
+                            <TextBlock Margin="24 6 6 0" FontWeight="Normal" TextWrapping="Wrap">
+                                ▪ Added ability to easily specify a different Saved Game location and Config file per playlist
+                            </TextBlock>
+                        </Expander>
+                        <Expander IsExpanded="false" Header="Version 1.0 (05/07/2018)" FontWeight="Bold" Margin="0 6 0 0">
+                            <TextBlock Margin="24 6 6 0" FontWeight="Normal" TextWrapping="Wrap">
+                                ▪ Forked from Doomie 1.6
+                            </TextBlock>
+                        </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <TabItem Header="License">
+                <ScrollViewer>
+                    <TextBlock Margin="6" TextWrapping="Wrap">
+                        This software is Freeware and is available for your use at no monetary cost.<LineBreak/> 
+                        <LineBreak/>
+                        In other words, while this software may be used without payment this is still proprietary software and modification, re-distribution or reverse-engineering without the author's permission is prohibited.
+                    </TextBlock>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

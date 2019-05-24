@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YADL", "YADL\YADL.csproj", "{B06BD15C-D22A-4570-80ED-1A7551877F71}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B06BD15C-D22A-4570-80ED-1A7551877F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B06BD15C-D22A-4570-80ED-1A7551877F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B06BD15C-D22A-4570-80ED-1A7551877F71}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{B06BD15C-D22A-4570-80ED-1A7551877F71}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {635C652D-1CB5-4424-9AB5-A70472F0D577}
+	EndGlobalSection
+EndGlobal
