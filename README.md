@@ -5,11 +5,12 @@ It's tool to help keep track of and launch Doom Engine games and mods.
 It's based off of the source of another launcher: Doomie.
 
 # What's new from Doomie 1.7?
-- Can now specify Categories to help further organize Playlists.
+- Can now specify Categories tabs to help further organize Playlists.
   - Playlists can be a part of any number of categories.
+  - Can reorder Categories tabs via drag/drop.
+    - Removing Category tabs is not yet added... (but can be done via config editing)
   - Categories can also be set via the Playlist context menu (helpful for adding a category to groups of playlists)
-  - Can reorder Categories via the tabs
-    - Removing playlists is not yet added... (but can be done via config editing)
+  
 - Allows hiding of Load/Merge/Location fields in PWAD list.
   - Settings are saved to the program's config file
 - Wads can be loaded/unloaded by double-clicking them.
