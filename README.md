@@ -10,7 +10,6 @@ It's based off of the source of another launcher: Doomie.
   - Can reorder Categories tabs via drag/drop.
     - Removing Category tabs is not yet added... (but can be done via config editing)
   - Categories can also be set via the Playlist context menu (helpful for adding a category to groups of playlists)
-  
 - Allows hiding of Load/Merge/Location fields in PWAD list.
   - Settings are saved to the program's config file
 - Wads can be loaded/unloaded by double-clicking them.
