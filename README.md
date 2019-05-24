@@ -22,10 +22,10 @@ It's based off of the source of another launcher: Doomie.
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
 # TODO:
-[ ] Remember last category/playlist on startup
-[ ] Removing Categories.
-[ ] Better looking Category creation screen
-[ ] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
+- [ ] Remember last category/playlist on startup
+- [ ] Removing Categories.
+- [ ] Better looking Category creation screen
+- [ ] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
 
 # CREDITS
 YADL is a fork of Doomie 1.6 by buja-buja: https://forum.zdoom.org/viewtopic.php?f=44&t=61647
