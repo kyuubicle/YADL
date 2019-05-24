@@ -9,7 +9,7 @@ It's based off of the source of another launcher: Doomie.
   - Playlists can be a part of any number of categories.
   - Categories can also be set via the Playlist context menu (helpful for adding a category to groups of playlists)
   - Can reorder Categories via the tabs
-    - Removing playlists is not yet added...
+    - Removing playlists is not yet added... (but can be done via config editing)
 - Allows hiding of Load/Merge/Location fields in PWAD list.
   - These will be saved to the program's config file
 - Wads can be loaded/unloaded by double-clicking them.
@@ -20,6 +20,12 @@ It's based off of the source of another launcher: Doomie.
 - Changed UI a bit:
   -	Uses a Menu instead of buttons for basic Playlist controls
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
+
+# TODO:
+[ ] Remember last category/playlist on startup
+[ ] Removing Categories.
+[ ] Better looking Category creation screen
+[ ] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
 
 # CREDITS
 YADL is a fork of Doomie 1.6 by buja-buja: https://forum.zdoom.org/viewtopic.php?f=44&t=61647
