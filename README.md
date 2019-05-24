@@ -6,7 +6,9 @@ It's... well, yet another doom launcher. YADL. Yeah.
 
 *ahem*
 
-It's tool to help keep track of and launch Doom Engine games and mods. It's based off of the source of another launcher: Doomie.
+It's tool to help keep track of and launch Doom Engine games and mods. 
+
+It's based off of the source of another launcher: Doomie.
 
 # What's new from Doomie?
 - Can now specify Categories to help further organize Playlists.
