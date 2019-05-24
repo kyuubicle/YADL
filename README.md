@@ -4,7 +4,7 @@ It's... well, yet another doom launcher. YADL. Yeah. *ahem*
 It's tool to help keep track of and launch Doom Engine games and mods.  
 It's based off of the source of another launcher: Doomie.
 
-# What's new from Doomie?
+# What's new from Doomie 1.7?
 - Can now specify Categories to help further organize Playlists.
   - Playlists can be a part of any number of categories.
   - Categories can also be set via the Playlist context menu (helpful for adding a category to groups of playlists)
