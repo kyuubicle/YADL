@@ -18,13 +18,20 @@ It's based off of the source of another launcher: Doomie.
  	- Bold - Will be Loaded
   - Red and Italic - File missing
 - Changed UI a bit:
+  - Context Menus on Playlist list and Pwad list themselves (as well as the individual elements)
   -	Uses a Menu instead of buttons for basic Playlist controls
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
 # TODO
+- [X] Add direct Config/Save Directory settings 
+  - They are present, but they are only setup to work with GZDoom for now, so are disabled/hidden by default
+    - Can enable by adding the following to your YADL.cfg:
+      > [Hidden_Features]  
+      > Config=yes  
+      > SaveDir=yes  
 - [ ] Remember last category/playlist on startup
 - [ ] Removing Categories.
-- [ ] Better looking Category creation screen
+- [ ] Better looking Text Prompts
 - [ ] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
 
 # CREDITS
