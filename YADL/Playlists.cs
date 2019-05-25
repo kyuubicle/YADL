@@ -12,7 +12,7 @@ namespace YADL
         {
             get
             {
-                Uri Icon = new Uri(@Path.Combine(Playlist_Location, Playlist_Name).ToString() + ".png", UriKind.RelativeOrAbsolute);
+                Uri Icon = new Uri(@Path.Combine(Playlist_Location, Playlist_FileName).ToString() + ".png", UriKind.RelativeOrAbsolute);
                 if (!File.Exists(Icon.LocalPath))
                 {
                     Icon = new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "playlist.png"), UriKind.RelativeOrAbsolute);
@@ -43,6 +43,19 @@ namespace YADL
                 {
                     _Playlist_Name = value;
                     OnPropertyChanged("Playlist_Name");
+                }
+            }
+        }
+
+        public string Playlist_FileName
+        {
+            get { return _Playlist_FileName; }
+            set
+            {
+                if (_Playlist_FileName != value)
+                {
+                    _Playlist_FileName = value;
+                    OnPropertyChanged("Playlist_FileName");
                 }
             }
         }
@@ -394,11 +407,11 @@ namespace YADL
             }
         }
 
-        public Playlists(bool Playlist_Changed, bool Playlist_Save, string Playlist_Name, int Playlist_Files, string Playlist_Location, string Playlist_SourcePort, bool Playlist_SourcePort_HasParameters, string Playlist_SourcePort_Parameters, string Playlist_IWad, ObservableCollection<string> Playlist_Categories = null, string Playlist_Savedir = null, bool Playlist_HasSavedir = false, bool Playlist_HasConfig = false, string Playlist_Config = null, ObservableCollection<Wads> Wadlist = null, string Playlist_SourcePort_Description = null, string Playlist_IWad_Description = null, string Playlist_Config_Description = null, string Playlist_Savedir_Description = null)        {
+        public Playlists(bool Playlist_Changed, bool Playlist_Save, string Playlist_Name, string Playlist_FileName, int Playlist_Files, string Playlist_Location, string Playlist_SourcePort, bool Playlist_SourcePort_HasParameters, string Playlist_SourcePort_Parameters, string Playlist_IWad, ObservableCollection<string> Playlist_Categories = null, string Playlist_Savedir = null, bool Playlist_HasSavedir = false, bool Playlist_HasConfig = false, string Playlist_Config = null, ObservableCollection<Wads> Wadlist = null, string Playlist_SourcePort_Description = null, string Playlist_IWad_Description = null, string Playlist_Config_Description = null, string Playlist_Savedir_Description = null)        {
             _Playlist_Changed = Playlist_Changed;
             _Playlist_Save = Playlist_Save;
+            _Playlist_FileName = Playlist_FileName;
             _Playlist_Name = Playlist_Name;
-            
             _Playlist_Files = Playlist_Files;
             _Playlist_Location = Playlist_Location;
             _Playlist_SourcePort = Playlist_SourcePort;
@@ -437,6 +450,7 @@ namespace YADL
         private bool _Playlist_Changed;
         private bool _Playlist_Save;
         private string _Playlist_Name;
+        private string _Playlist_FileName;
         private ObservableCollection<string> _Playlist_Categories;
         private int _Playlist_Files;
         private string _Playlist_Location;

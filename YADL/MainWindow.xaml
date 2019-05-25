@@ -10,6 +10,11 @@
         Closing="Window_Closing">
 
     <Window.Resources>
+        <ContextMenu x:Key="ListContextMenu">
+            <MenuItem x:Name="MenuItem_OpenPWad" Header="Add..." ToolTip="Adds a pWad file to the Playlist" Click="Button_Pwad_Open_Click"/>
+            <MenuItem x:Name="MenuItem_ImportPwad" Header="Import..." ToolTip="Imports all PWad files from a given directory into the Playlist" Click="Button_Pwad_Import_Click"/>
+            <MenuItem x:Name="MenuItem_ClearPwad" Header="Clear" ToolTip="Removes all PWad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
+        </ContextMenu>
         <DataTemplate x:Key="CheckBox_Load">
             <StackPanel Orientation="Horizontal">
                 <CheckBox Checked="CheckBox_Load_Toogle" Unchecked="CheckBox_Load_Toogle" IsChecked="{Binding Wad_Load}" />
@@ -106,6 +111,7 @@
                     <ListView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Playlist}" x:Name="ListView_Playlists" dd:DragDrop.DragDropContext="Playlist" SelectionChanged="ListView_Playlists_SelectionChanged" AllowDrop="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Margin="1 0 3 0" Grid.ColumnSpan="2">
                         <ListView.Resources>
                             <ContextMenu x:Key="ItemContextMenu">
+                                <MenuItem x:Name="ItemContextMenu_Playlists_Rename" Header="Rename playlist" Click="ItemContextMenu_Playlists_Rename_Click"/>
                                 <MenuItem x:Name="ItemContextMenu_Playlists_Remove" Header="Remove playlist(s)" Click="ItemContextMenu_Playlists_Remove_Click"/>
                             </ContextMenu>
                         </ListView.Resources>
@@ -320,7 +326,7 @@
 
                     </Grid>
 
-                    <ListView ItemsSource="{Binding SelectedItem.Wadlist, ElementName=ListView_Playlists}" dd:DragDrop.DragDropContext="Wadlist" x:Name="ListView_Pwads" SelectionChanged="ListView_Pwads_SelectionChanged" AllowDrop="True" Drop="ListView_Pwads_Drop" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Grid.Row="1" BorderThickness="1" Margin="3 1 3 0" MouseDoubleClick="ListView_Pwads_MouseDoubleClick" PreviewKeyDown="ListView_Pwads_KeyUp">
+                    <ListView ContextMenu="{StaticResource ListContextMenu}" ItemsSource="{Binding SelectedItem.Wadlist, ElementName=ListView_Playlists}" dd:DragDrop.DragDropContext="Wadlist" x:Name="ListView_Pwads" SelectionChanged="ListView_Pwads_SelectionChanged" AllowDrop="True" Drop="ListView_Pwads_Drop" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Grid.Row="1" BorderThickness="1" Margin="3 1 3 0" MouseDoubleClick="ListView_Pwads_MouseDoubleClick" PreviewKeyDown="ListView_Pwads_KeyUp">
                         <ListView.Resources>
                             <ContextMenu x:Key="HeaderContextMenu">
                                 <MenuItem x:Name="ColumnLoad_View_Toggle" Header="Load" IsCheckable="True" IsChecked="True" Click="ColumnLoad_View_Toggle_Click"/>
@@ -329,6 +335,10 @@
                                 <MenuItem x:Name="ColumnLocation_View_Toggle" Header="Location" IsCheckable="True" IsChecked="True" Click="ColumnLocation_View_Toggle_Click"/>
                             </ContextMenu>
                             <ContextMenu x:Key="ItemContextMenu">
+                                <MenuItem x:Name="MenuItem_OpenPWad2" Header="Add..." ToolTip="Adds a pWad file to the Playlist" Click="Button_Pwad_Open_Click"/>
+                                <MenuItem x:Name="MenuItem_ImportPwad2" Header="Import..." ToolTip="Imports all PWad files from a given directory into the Playlist" Click="Button_Pwad_Import_Click"/>
+                                <MenuItem x:Name="MenuItem_ClearPwad2" Header="Clear" ToolTip="Removes all PWad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
+                                <Separator/>
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Toggle_Load" Header="Load" Click="ItemContextMenu_Pwads_Toggle_Load_Click" IsChecked="{Binding Wad_Load}"/>
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Toggle_Merge" Header="Merge" Click="ItemContextMenu_Pwads_Toggle_Merge_Click" IsChecked="{Binding Wad_Merge}" />
                                 <Separator/>
@@ -425,23 +435,9 @@
 
                         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
 
-                            <Button 
-                        x:Name="Button_Pwad_Open" 
-                        Click="Button_Pwad_Open_Click"
-                        ToolTip="Adds a PWad file to the Playlist"
-                        Content="   Open...   " Margin="0 6 6 0"/>
-
-                            <Button 
-                        x:Name="Button_Pwad_Import" 
-                        Click="Button_Pwad_Import_Click"
-                        ToolTip="Imports all PWad files from a given directory into the Playlist"
-                        Content="   Import...   " Margin="0 6 6 0"/>
-
-                            <Button 
-                        x:Name="Button_Pwad_Clear" 
-                        Click="Button_Pwad_Clear_Click"
-                        ToolTip="Removes all PWad files from the Playlist"
-                        Content="   Clear   " Margin="0 6 6 0"/>
+                            <Button x:Name="Button_Pwad_Open" Click="Button_Pwad_Open_Click" ToolTip="Adds a PWad file to the Playlist" Content="   Add...   " Margin="0 6 6 0"/>
+                            <Button x:Name="Button_Pwad_Import"  Click="Button_Pwad_Import_Click" ToolTip="Imports all PWad files from a given directory into the Playlist" Content="   Import...   " Margin="0 6 6 0"/>
+                            <Button x:Name="Button_Pwad_Clear" Click="Button_Pwad_Clear_Click" ToolTip="Removes all PWad files from the Playlist" Content="   Clear   " Margin="0 6 6 0"/>
 
                         </StackPanel>
 
@@ -449,7 +445,6 @@
 
                             <Label Content="Filter:" FontWeight="Bold"/>
                             <TextBox x:Name="TextBox_PWad_Filter" Text="" Width="100" Height="18" GotFocus="TextBox_PWad_Filter_GotFocus" LostFocus="TextBox_PWad_Filter_LostFocus" TextChanged="TextBox_PWad_Filter_TextChanged"/>
-
 
                         </StackPanel>
 

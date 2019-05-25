@@ -39,6 +39,7 @@ namespace YADL
 
         ContextMenu CategoryContextMenu;
         MenuItem CategoryHeader = new MenuItem();
+        MenuItem RenameMenuItem;
 
         public MainWindow()
         {
@@ -47,6 +48,7 @@ namespace YADL
 
             UserCategories = new ObservableCollection<string>();
             CategoryContextMenu = (ContextMenu)this.ListView_Playlists.Resources["ItemContextMenu"];
+            RenameMenuItem = (MenuItem)CategoryContextMenu.Items[0];
 
             if (File.Exists(Settings_File))
             {
@@ -87,8 +89,8 @@ namespace YADL
             if (Playlist_New_File.ShowDialog() == true)
             {
                 Folder_Playlists_New = Path.GetDirectoryName(Playlist_New_File.FileName);
-                Playlists Playlist = new Playlists(true, false, Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), 0, Path.GetDirectoryName(Playlist_New_File.FileName), "", false, "", "");
-                var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_Name.ToLower() == Path.GetFileNameWithoutExtension(Playlist_New_File.FileName).ToLower() & x.Playlist_Location.ToLower() == Path.GetDirectoryName(Playlist_New_File.FileName).ToLower()));
+                Playlists Playlist = new Playlists(true, false, Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), 0, Path.GetDirectoryName(Playlist_New_File.FileName), "", false, "", "");
+                var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_FileName.ToLower() == Path.GetFileNameWithoutExtension(Playlist_New_File.FileName).ToLower() & x.Playlist_Location.ToLower() == Path.GetDirectoryName(Playlist_New_File.FileName).ToLower()));
                 if (Duplicate != null)
                 {
                     int Position = VM.Playlist.IndexOf(Duplicate);
@@ -99,6 +101,9 @@ namespace YADL
                 {
                     VM.Playlist.Add(Playlist);
                 }
+
+                ListView_Playlists.SelectedIndex = ListView_Playlists.Items.IndexOf(Playlist);
+
                 Helper_UI();
             }
         }
@@ -144,7 +149,7 @@ namespace YADL
             foreach (Playlists Playlist_Selected in ListView_Playlists.SelectedItems)
             {
                 Playlist_Selected.Playlist_Changed = false;
-                string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_Name) + ".dpf".ToString();
+                string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_FileName) + ".dpf".ToString();
                 Helper_Save(Playlist_Selected, File);
             }
         }
@@ -163,7 +168,8 @@ namespace YADL
                 };
                 if (Playlist_Save_As_File.ShowDialog() == true)
                 {
-                    Playlists Playlist = new Playlists(false, false, Path.GetFileNameWithoutExtension(Playlist_Save_As_File.FileName),
+                    Playlists Playlist = new Playlists(false, false, Playlist_Selected.Playlist_Name, 
+                        Path.GetFileNameWithoutExtension(Playlist_Save_As_File.FileName),
                         Playlist_Selected.Playlist_Files,
                         Path.GetDirectoryName(Playlist_Save_As_File.FileName),
                         Playlist_Selected.Playlist_SourcePort,
@@ -177,7 +183,7 @@ namespace YADL
                         Playlist_Selected.Playlist_Config,
                         Playlist_Selected.Wadlist);
                     var Duplicate = VM.Playlist.SingleOrDefault(x =>
-                        (x.Playlist_Name.ToLower() == Path.GetFileNameWithoutExtension(Playlist_Save_As_File.FileName).ToLower()
+                        (x.Playlist_FileName.ToLower() == Path.GetFileNameWithoutExtension(Playlist_Save_As_File.FileName).ToLower()
                         & x.Playlist_Location.ToLower() == Path.GetDirectoryName(Playlist_Save_As_File.FileName).ToLower()));
                     if (Duplicate != null)
                     {
@@ -211,7 +217,7 @@ namespace YADL
                     {
                         if (Playlist_Selected.Playlist_Save == true)
                         {
-                            string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_Name) + ".dpf".ToString();
+                            string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_FileName) + ".dpf".ToString();
                             Helper_Save(Playlist_Selected, File);
                         }
                     }
@@ -425,7 +431,7 @@ namespace YADL
                     {
                         if (Playlist_Selected.Playlist_Save == true)
                         {
-                            string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_Name) + ".dpf".ToString();
+                            string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_FileName) + ".dpf".ToString();
                             Helper_Save(Playlist_Selected, File);
                         }
                     }
@@ -541,7 +547,7 @@ namespace YADL
                     {
                         if (Playlist_Selected.Playlist_Save == true)
                         {
-                            string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_Name) + ".dpf".ToString();
+                            string File = Path.Combine(Playlist_Selected.Playlist_Location, Playlist_Selected.Playlist_FileName) + ".dpf".ToString();
                             Helper_Save(Playlist_Selected, File);
                         }
                     }
@@ -564,15 +570,24 @@ namespace YADL
                 FileInfo File_Info = new FileInfo(File);
                 if (File_Info.Extension.ToLower().Equals(".dpf"))
                 {
+                    string Playlist_Name = "";
+
                     PlaylistIO Dpf = new PlaylistIO(File_Info.FullName);
-                    string Playlist_Name = Path.GetFileNameWithoutExtension(File_Info.Name);
+                    if (Dpf.KeyExists("Name", "Info"))
+                        Playlist_Name = Dpf.Read("Name", "Info");
+                    else
+                        Playlist_Name = Path.GetFileNameWithoutExtension(File_Info.Name);
+
                     int Categories = 0;
                     if (Dpf.KeyExists("Counter", "Categories"))
                     {
                         Categories = Int32.Parse(Dpf.Read("Counter", "Categories"));
                     }
+
                     int Playlist_Files = Int32.Parse(Dpf.Read("Counter", "PWAD"));
+
                     string Playlist_Location = File_Info.DirectoryName;
+
                     string Playlist_Sourceport = Dpf.Read("Path", "SourcePort");
                     bool Playlist_SourcePort_HasParameters = Dpf.KeyExists("Parameters", "SourcePort");
                     string Playlist_SourcePort_Parameters = "";
@@ -580,9 +595,12 @@ namespace YADL
                     {
                         Playlist_SourcePort_Parameters = Dpf.Read("Parameters", "SourcePort");
                     }
+
                     string Playlist_Iwad = Dpf.Read("Path", "IWAD");
+
                     bool Playlist_HasConfig = Dpf.KeyExists("Enable", "Config");
                     string Playlist_Config = Dpf.Read("Path", "Config");
+
                     bool Playlist_HasSavedir = Dpf.KeyExists("Enable", "Savedir");
                     string Playlist_Savedir = Dpf.Read("Path", "Savedir");
 
@@ -630,10 +648,10 @@ namespace YADL
                         }
                     });
 
-                    var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_Name.ToLower() == Playlist_Name.ToLower() & x.Playlist_Location.ToLower() == Playlist_Location.ToLower()));
+                    var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_FileName.ToLower() == Path.GetFileNameWithoutExtension(File_Info.Name).ToLower() & x.Playlist_Location.ToLower() == Playlist_Location.ToLower()));
                     if (Duplicate == null)
                     {
-                        Playlists Playlist = new Playlists(false, false, Playlist_Name, Playlist_Files, Playlist_Location, Playlist_Sourceport, Playlist_SourcePort_HasParameters, Playlist_SourcePort_Parameters, Playlist_Iwad, Playlist_Categories, Playlist_Savedir, Playlist_HasSavedir, Playlist_HasConfig, Playlist_Config, Playlist_Wads);
+                        Playlists Playlist = new Playlists(false, false, Playlist_Name, Path.GetFileNameWithoutExtension(File_Info.Name), Playlist_Files, Playlist_Location, Playlist_Sourceport, Playlist_SourcePort_HasParameters, Playlist_SourcePort_Parameters, Playlist_Iwad, Playlist_Categories, Playlist_Savedir, Playlist_HasSavedir, Playlist_HasConfig, Playlist_Config, Playlist_Wads);
                         VM.Playlist.Add(Playlist);
                     }
                 }
@@ -659,18 +677,25 @@ namespace YADL
         private void Helper_Save(Playlists Playlist, string File)
         {
             PlaylistIO Dpf = new PlaylistIO(File);
+
+            Dpf.DeleteSection("Info");
             Dpf.DeleteSection("SourcePort");
             Dpf.DeleteSection("IWAD");
             Dpf.DeleteSection("PWAD");
             Dpf.DeleteSection("Config");
             Dpf.DeleteSection("Savedir");
             Dpf.DeleteSection("Categories");
+
+            Dpf.Write("Name", Playlist.Playlist_Name, "Info");
+
             Dpf.Write("Path", Playlist.Playlist_SourcePort.ToString(), "SourcePort");
             if (Playlist.Playlist_SourcePort_HasParameters == true)
             {
                 Dpf.Write("Parameters", Playlist.Playlist_SourcePort_Parameters.ToString(), "SourcePort");
             }
+
             Dpf.Write("Path", Playlist.Playlist_IWad.ToString(), "IWAD");
+
             Dpf.Write("Counter", Playlist.Playlist_Files.ToString(), "PWAD");
             for (int i = 0; i < Playlist.Wadlist.Count; i++)
             {
@@ -681,14 +706,16 @@ namespace YADL
                     Playlist.Wadlist[i].Wad_Merge.ToString()
                     , "PWAD");
             }
+
             if (Playlist.Playlist_HasConfig == true)
                 Dpf.Write("Enable", Playlist.Playlist_HasConfig.ToString(), "Config");
-
-            Dpf.Write("Path", Playlist.Playlist_Config.ToString(), "Config");
+            if (!String.IsNullOrEmpty(Playlist.Playlist_Config))
+                Dpf.Write("Path", Playlist.Playlist_Config.ToString(), "Config");
 
             if (Playlist.Playlist_HasSavedir == true)
                 Dpf.Write("Enable", Playlist.Playlist_HasConfig.ToString(), "Savedir");
-            Dpf.Write("Path", Playlist.Playlist_Savedir.ToString(), "Savedir");
+            if(!String.IsNullOrEmpty(Playlist.Playlist_Savedir))
+                Dpf.Write("Path", Playlist.Playlist_Savedir.ToString(), "Savedir");
 
             Dpf.Write("Counter", Playlist.Playlist_Categories.Count().ToString(), "Categories");
             for(int i = 0; i < Playlist.Playlist_Categories.Count(); i++)
@@ -895,7 +922,7 @@ namespace YADL
                 {
                     Settings.Write("Playlist" + (i + 1).ToString(), Path.Combine(
                         ((Playlists)ListView_Playlists.Items.GetItemAt(i)).Playlist_Location,
-                        ((Playlists)ListView_Playlists.Items.GetItemAt(i)).Playlist_Name + ".dpf")
+                        ((Playlists)ListView_Playlists.Items.GetItemAt(i)).Playlist_FileName + ".dpf")
                         , "Playlists");
                 }
             }
@@ -1036,6 +1063,8 @@ namespace YADL
                 TextBox_PWad_Filter.IsEnabled = false;
 
                 CategoryHeader.IsEnabled = false;
+
+                RenameMenuItem.IsEnabled = false;
             }
             else if (ListView_Playlists.SelectedItems.Count == 1)
             {
@@ -1053,6 +1082,8 @@ namespace YADL
                 Button_Config_Open.IsEnabled = true;
                 Button_Savedir_Open.IsEnabled = true;
                 TextBox_PWad_Filter.IsEnabled = true;
+
+                RenameMenuItem.IsEnabled = true;
 
                 if (UserCategories.Count() > 0)
                 {
@@ -1095,6 +1126,8 @@ namespace YADL
                 TextBox_PWad_Filter.IsEnabled = false;
 
                 CategoryHeader.IsEnabled = true;
+
+                RenameMenuItem.IsEnabled = false;
 
                 for (int i=0; i < UserCategories.Count; i++)
                 {
@@ -1330,13 +1363,13 @@ namespace YADL
                 if (ti.Header.ToString() != "All" & ti.Header.ToString() != "+")
                 {
                     if (String.IsNullOrEmpty(TextBox_Playlist_Filter.Text) != true & TextBox_Playlist_Filter.Text != "Type here to filter playlists...")
-                        Filter = new Predicate<object>(o => ((Playlists)o).Playlist_Categories.Contains(ti.Header.ToString()) && ((Playlists)o).Playlist_Name.ToLower().Contains(TextBox_Playlist_Filter.Text.ToLower()));
+                        Filter = new Predicate<object>(o => ((Playlists)o).Playlist_Categories.Contains(ti.Header.ToString()) && ((Playlists)o).Playlist_FileName.ToLower().Contains(TextBox_Playlist_Filter.Text.ToLower()));
                     else
                         Filter = new Predicate<object>(o => ((Playlists)o).Playlist_Categories.Contains(ti.Header.ToString()));
                 }
                 else if (String.IsNullOrEmpty(TextBox_Playlist_Filter.Text) != true & TextBox_Playlist_Filter.Text != "Type here to filter playlists...")
                 {
-                    Filter = new Predicate<object>(o => ((Playlists)o).Playlist_Name.ToLower().Contains(TextBox_Playlist_Filter.Text.ToLower()));
+                    Filter = new Predicate<object>(o => ((Playlists)o).Playlist_FileName.ToLower().Contains(TextBox_Playlist_Filter.Text.ToLower()));
                 }
 
                 ListView_Playlists.Items.Filter = null;
@@ -1422,8 +1455,6 @@ namespace YADL
             }
         }
 
-
-
         private void ListView_Pwads_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.Enter)
@@ -1461,6 +1492,19 @@ namespace YADL
             UserCategories.Insert(tabControl.Items.IndexOf(tabTarget) - 1, tabSource.Header.ToString());
 
             Categories_Changed = true;
+
+            Helper_UI();
+        }
+
+        private void ItemContextMenu_Playlists_Rename_Click(object sender, RoutedEventArgs e)
+        {
+            var promptResponse = Prompt.ShowDialog("Playlist Name: ", "Enter a new name for playlist (leave blank to cancel)");
+
+            if (promptResponse != "")
+            {
+                ((Playlists)ListView_Playlists.SelectedItem).Playlist_Name = promptResponse;
+                ((Playlists)ListView_Playlists.SelectedItem).Playlist_Changed = true;
+            }
 
             Helper_UI();
         }
