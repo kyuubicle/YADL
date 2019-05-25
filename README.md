@@ -5,6 +5,9 @@ It's tool to help keep track of and launch Doom Engine games and mods.
 It's based off of the source of another launcher: Doomie.
 
 # What's new from Doomie 1.7?
+- When Creating a New Playlist or Opening a single playlist, that playlist will be automatically selected.
+  - No playlist will be selected when *importing* a directory of playlists.
+- Can now rename playlists (without saving it as a new file)
 - Can now specify Categories tabs to help further organize Playlists.
   - Playlists can be a part of any number of categories.
   - Can reorder Categories tabs via drag/drop.
