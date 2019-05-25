@@ -36,7 +36,7 @@ namespace YADL
             DialogResult = false;
         }
 
-        private void ItemContextMenu_Selection_Toogle(object sender, RoutedEventArgs e)
+        private void Helper_Save_Toggle()
         {
             foreach (Playlists Playlist in ListView_Save.SelectedItems)
             {
@@ -49,6 +49,11 @@ namespace YADL
                     Playlist.Playlist_Save = true;
                 }
             }
+        }
+
+        private void ItemContextMenu_Selection_Toggle(object sender, RoutedEventArgs e)
+        {
+            Helper_Save_Toggle();
         }
 
         public static class IconHelper
@@ -87,6 +92,21 @@ namespace YADL
                 SendMessage(hwnd, WM_SETICON, new IntPtr(1), IntPtr.Zero);
                 SendMessage(hwnd, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
             }
+        }
+
+        private void ListView_Save_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.Enter)
+            {
+                Helper_Save_Toggle();
+            }
+
+            e.Handled = true;
+        }
+
+        private void ListView_Save_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Helper_Save_Toggle();
         }
     }
 }

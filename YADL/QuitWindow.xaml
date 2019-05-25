@@ -32,14 +32,14 @@
 
         <ListView 
             ItemsSource="{Binding Playlist}"
-            x:Name="ListView_Save" Grid.Column="0" Grid.Row="0">
+            x:Name="ListView_Save" Grid.Column="0" Grid.Row="0" PreviewKeyDown="ListView_Save_PreviewKeyDown" MouseDoubleClick="ListView_Save_MouseDoubleClick">
             <ListView.Resources>
                 <ContextMenu 
                     x:Key="ItemContextMenu">
                         <MenuItem 
                         x:Name="ItemContextMenu_Selection_Toogle"
-                        Header="Toogle save" 
-                        Click="ItemContextMenu_Selection_Toogle"/>
+                        Header="Toggle Save" 
+                        Click="ItemContextMenu_Selection_Toggle"/>
 
                 </ContextMenu>
             </ListView.Resources>
