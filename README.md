@@ -8,7 +8,6 @@ It's based off of the source of another launcher: Doomie.
 - Can now specify Categories tabs to help further organize Playlists.
   - Playlists can be a part of any number of categories.
   - Can reorder Categories tabs via drag/drop.
-    - Removing Category tabs is not yet added... (but can be done via config editing)
   - Categories can also be set via the Playlist context menu (helpful for adding a category to groups of playlists)
 - Allows hiding of Load/Merge/Location fields in PWAD list.
   - Settings are saved to the program's config file
@@ -30,7 +29,10 @@ It's based off of the source of another launcher: Doomie.
       > Config=yes  
       > SaveDir=yes  
 - [ ] Remember last category/playlist on startup
-- [ ] Removing Categories.
+- [X] Removing Categories.
+  - When removing a Category, it will remove it from the UI only. Playlists will still keep the Category in their file in case the Category is added back later.
+- [X] Renaming Categories
+  - When renaming a Category, all playlists with that category will use the new category name.
 - [ ] Better looking Text Prompts
 - [ ] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
 
