@@ -109,6 +109,19 @@
                                 </ControlTemplate>
                             </TabControl.Template>
 
+                            <TabControl.Resources>
+                                <ContextMenu x:Key="TabContextMenu">
+                                    <MenuItem x:Name="ContextItem_RenameCategory" Header="Rename..." Click="ContextItem_RenameCategory_Click"/>
+                                    <MenuItem x:Name="ContextItem_RemoveCategory" Header="Remove Category" Click="ContextItem_RemoveCategory_Click"/>
+                                </ContextMenu>
+                            </TabControl.Resources>
+
+                            <TabControl.ItemContainerStyle>
+                                <Style TargetType="{x:Type TabItem}">
+                                    <EventSetter Event="MouseRightButtonDown" Handler="TabControl_MouseRightButtonDown"/>
+                                </Style>
+                            </TabControl.ItemContainerStyle>
+
                             <TabItem x:Name="TabAll"  Header="All" AllowDrop="False" dd:DragDrop.DragSourceIgnore="True" dd:DragDrop.IsDragSource="False" dd:DragDrop.IsDropTarget="False"/>
                             <TabItem x:Name="TabNew" Header="+" AllowDrop="False" dd:DragDrop.DragSourceIgnore="True" dd:DragDrop.IsDragSource="False" dd:DragDrop.IsDropTarget="False"/>
                         </TabControl>

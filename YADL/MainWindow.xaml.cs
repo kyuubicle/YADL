@@ -827,6 +827,7 @@ namespace YADL
 
                     TabItem ti = new TabItem();
                     ti.Header = UserCategories[i - 1];
+                    ti.ContextMenu = (ContextMenu)tabControl.Resources["TabContextMenu"];
                     tabControl.Items.Insert(tabControl.Items.Count - 1, ti);
                 }
             }
@@ -1356,30 +1357,44 @@ namespace YADL
                 if (promptValue == "+" || promptValue == "All")
                 {
                     MessageBox.Show("Cannot name a new category \"+\" or \"All\"");
+                    //Forces the 'All' category tab to be selected if a new category is not added
+                    //TODO: Maybe return to the previous selected tab somehow?
                     tabControl.SelectedIndex = 0;
                 }
                 else if (promptValue != "")
                 {
-                    if (UserCategories == null)
+                    
+                    if(!UserCategories.Contains(promptValue))
                     {
-                        UserCategories = new ObservableCollection<string>();
+                        if (UserCategories == null)
+                        {
+                            UserCategories = new ObservableCollection<string>();
+                        }
+
+                        UserCategories.Add(promptValue);
+
+                        TabItem newTab = new TabItem();
+
+                        newTab.Header = promptValue;
+                        newTab.ContextMenu = (ContextMenu)tabControl.Resources["TabContextMenu"];
+                        tabControl.Items.Insert(tabControl.Items.IndexOf(ti), newTab);
+                        tabControl.SelectedItem = newTab;
+
+                        Categories_Changed = true;
                     }
-
-                    UserCategories.Add(promptValue);
-
-                    TabItem newTab = new TabItem();
-
-                    newTab.Header = promptValue;
-                    tabControl.Items.Insert(tabControl.Items.IndexOf(ti),newTab);
-
-                    MenuItem mi = new MenuItem();
-                    mi.Header = promptValue;
-                    mi.Click += MenuItem_Category_Click;
-
-                    CategoryHeader.Items.Add(mi);
+                    else
+                    {
+                        MessageBox.Show("Category " + promptValue + " already exists.");
+                        //Forces the 'All' category tab to be selected if a new category is not added
+                        //TODO: Maybe return to the previous selected tab somehow?
+                        tabControl.SelectedIndex = 0;
+                    }
+                    
                 }
                 else
                 {
+                    //Forces the 'All' category tab to be selected if a new category is not added
+                    //TODO: Maybe return to the previous selected tab somehow?
                     tabControl.SelectedIndex = 0;
                 }
             }
@@ -1531,7 +1546,6 @@ namespace YADL
 
             Helper_Filter();
 
-            Helper_UI();
         }
 
         private void ItemContextMenu_Playlists_Rename_Click(object sender, RoutedEventArgs e)
@@ -1545,6 +1559,58 @@ namespace YADL
             }
 
             Helper_UI();
+        }
+
+        private void ContextItem_RemoveCategory_Click(object sender, RoutedEventArgs e)
+        {
+            if(tabControl.SelectedIndex != 0 && tabControl.SelectedIndex != tabControl.Items.Count - 1)
+            {
+                UserCategories.Remove(((TabItem)tabControl.SelectedItem).Header.ToString());
+
+                tabControl.Items.Remove(tabControl.Items[tabControl.SelectedIndex]);
+                Categories_Changed = true;
+
+                //Makes sure the 'New Category' tab is never selected
+                if (tabControl.SelectedIndex == tabControl.Items.Count - 1)
+                    tabControl.SelectedIndex = 0;
+
+                Helper_Filter();
+            }
+        }
+
+        private void TabControl_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //Forces the tab to be selected.
+            tabControl.SelectedItem = sender as TabItem;
+
+            Helper_Filter();
+        }
+
+        private void ContextItem_RenameCategory_Click(object sender, RoutedEventArgs e)
+        {
+            string promptValue = Prompt.ShowDialog("Category Name: ", "Enter a new name for Category (leave blank to cancel)");
+
+            if(promptValue != "")
+            {
+                UserCategories[UserCategories.IndexOf(((TabItem)tabControl.SelectedItem).Header.ToString())] = promptValue;
+
+                ListView_Playlists.Items.Filter = null;
+
+                for(int i = 0; i < ListView_Playlists.Items.Count; i++)
+                {
+                    Playlists p = ListView_Playlists.Items[i] as Playlists;
+
+                    if(p.Playlist_Categories.Contains(((TabItem)tabControl.SelectedItem).Header.ToString()))
+                    {
+                        p.Playlist_Categories[p.Playlist_Categories.IndexOf(((TabItem)tabControl.SelectedItem).Header.ToString())] = promptValue;
+                    }
+                }
+
+                ((TabItem)tabControl.SelectedItem).Header = promptValue;
+
+                Categories_Changed = true;
+                Helper_Filter();
+            }
         }
     }
 }
