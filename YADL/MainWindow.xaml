@@ -10,7 +10,13 @@
         Closing="Window_Closing">
 
     <Window.Resources>
-        <ContextMenu x:Key="ListContextMenu">
+        <ContextMenu x:Key="ListPlaylist_ContextMenu">
+            <MenuItem Header="New.." ToolTip="Creates a new empty Playlist" Click="MenuItem_PlaylistNew_Click"/>
+            <MenuItem Header="Open..." ToolTip="Opens a Playlist" Click="MenuItem_PlaylistOpen_Click" />
+            <MenuItem Header="Import..." ToolTip="Imports all Playlists from a directory" Click="MenuItem_PlaylistImport_Click" />
+            <MenuItem Header="Clear" ToolTip="Removes all listed Playlists entries" Click="MenuItem_PlaylistClear_Click" />
+        </ContextMenu>
+        <ContextMenu x:Key="ListPwad_ContextMenu">
             <MenuItem x:Name="MenuItem_OpenPWad" Header="Add..." ToolTip="Adds a pWad file to the Playlist" Click="Button_Pwad_Open_Click"/>
             <MenuItem x:Name="MenuItem_ImportPwad" Header="Import..." ToolTip="Imports all PWad files from a given directory into the Playlist" Click="Button_Pwad_Import_Click"/>
             <MenuItem x:Name="MenuItem_ClearPwad" Header="Clear" ToolTip="Removes all PWad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
@@ -108,9 +114,11 @@
                         </TabControl>
                     </StackPanel>
 
-                    <ListView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Playlist}" x:Name="ListView_Playlists" dd:DragDrop.DragDropContext="Playlist" SelectionChanged="ListView_Playlists_SelectionChanged" AllowDrop="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Margin="1 0 3 0" Grid.ColumnSpan="2">
+                    <ListView ContextMenu="{StaticResource ListPlaylist_ContextMenu}" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Playlist}" x:Name="ListView_Playlists" dd:DragDrop.DragDropContext="Playlist" SelectionChanged="ListView_Playlists_SelectionChanged" AllowDrop="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Margin="1 0 3 0" Grid.ColumnSpan="2">
                         <ListView.Resources>
                             <ContextMenu x:Key="ItemContextMenu">
+                                <MenuItem Header="Save..." Click="MenuItem_PlaylistSave_Click"/>
+                                <MenuItem Header="Save as.. " Click="MenuItem_PlaylistSaveAs_Click"/>
                                 <MenuItem x:Name="ItemContextMenu_Playlists_Rename" Header="Rename playlist" Click="ItemContextMenu_Playlists_Rename_Click"/>
                                 <MenuItem x:Name="ItemContextMenu_Playlists_Remove" Header="Remove playlist(s)" Click="ItemContextMenu_Playlists_Remove_Click"/>
                             </ContextMenu>
@@ -326,7 +334,7 @@
 
                     </Grid>
 
-                    <ListView ContextMenu="{StaticResource ListContextMenu}" ItemsSource="{Binding SelectedItem.Wadlist, ElementName=ListView_Playlists}" dd:DragDrop.DragDropContext="Wadlist" x:Name="ListView_Pwads" SelectionChanged="ListView_Pwads_SelectionChanged" AllowDrop="True" Drop="ListView_Pwads_Drop" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Grid.Row="1" BorderThickness="1" Margin="3 1 3 0" MouseDoubleClick="ListView_Pwads_MouseDoubleClick" PreviewKeyDown="ListView_Pwads_KeyUp">
+                    <ListView ContextMenu="{StaticResource ListPwad_ContextMenu}" ItemsSource="{Binding SelectedItem.Wadlist, ElementName=ListView_Playlists}" dd:DragDrop.DragDropContext="Wadlist" x:Name="ListView_Pwads" SelectionChanged="ListView_Pwads_SelectionChanged" AllowDrop="True" Drop="ListView_Pwads_Drop" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Grid.Row="1" BorderThickness="1" Margin="3 1 3 0" MouseDoubleClick="ListView_Pwads_MouseDoubleClick" PreviewKeyDown="ListView_Pwads_KeyUp">
                         <ListView.Resources>
                             <ContextMenu x:Key="HeaderContextMenu">
                                 <MenuItem x:Name="ColumnLoad_View_Toggle" Header="Load" IsCheckable="True" IsChecked="True" Click="ColumnLoad_View_Toggle_Click"/>
@@ -335,10 +343,12 @@
                                 <MenuItem x:Name="ColumnLocation_View_Toggle" Header="Location" IsCheckable="True" IsChecked="True" Click="ColumnLocation_View_Toggle_Click"/>
                             </ContextMenu>
                             <ContextMenu x:Key="ItemContextMenu">
-                                <MenuItem x:Name="MenuItem_OpenPWad2" Header="Add..." ToolTip="Adds a pWad file to the Playlist" Click="Button_Pwad_Open_Click"/>
-                                <MenuItem x:Name="MenuItem_ImportPwad2" Header="Import..." ToolTip="Imports all PWad files from a given directory into the Playlist" Click="Button_Pwad_Import_Click"/>
-                                <MenuItem x:Name="MenuItem_ClearPwad2" Header="Clear" ToolTip="Removes all PWad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
+                                <!---
+                                <MenuItem Header="Add..." ToolTip="Adds a pWad file to the Playlist" Click="Button_Pwad_Open_Click"/>
+                                <MenuItem Header="Import..." ToolTip="Imports all PWad files from a given directory into the Playlist" Click="Button_Pwad_Import_Click"/>
+                                <MenuItem Header="Clear" ToolTip="Removes all PWad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
                                 <Separator/>
+                                -->
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Toggle_Load" Header="Load" Click="ItemContextMenu_Pwads_Toggle_Load_Click" IsChecked="{Binding Wad_Load}"/>
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Toggle_Merge" Header="Merge" Click="ItemContextMenu_Pwads_Toggle_Merge_Click" IsChecked="{Binding Wad_Merge}" />
                                 <Separator/>

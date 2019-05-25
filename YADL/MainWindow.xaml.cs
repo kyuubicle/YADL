@@ -37,9 +37,18 @@ namespace YADL
         bool Categories_Frozen = false;
         bool Categories_Changed = false;
 
-        ContextMenu CategoryContextMenu;
+        ContextMenu ListView_Playlist_ContextMenu;
+        //ContextMenu ListView_Pwad_ContextMenu;
+
+        ContextMenu Playlist_ContextMenu;
+
         MenuItem CategoryHeader = new MenuItem();
-        MenuItem RenameMenuItem;
+        MenuItem Clear_PlaylistContextItem;
+        MenuItem SaveContextItem;
+        MenuItem SaveAsContextItem;
+        MenuItem RenameContextItem;
+
+        //ContextMenu Pwad_ContextMenu;
 
         public MainWindow()
         {
@@ -47,8 +56,23 @@ namespace YADL
             DataContext = VM;
 
             UserCategories = new ObservableCollection<string>();
-            CategoryContextMenu = (ContextMenu)this.ListView_Playlists.Resources["ItemContextMenu"];
-            RenameMenuItem = (MenuItem)CategoryContextMenu.Items[0];
+            ListView_Playlist_ContextMenu = (ContextMenu)this.Resources["ListPlaylist_ContextMenu"];
+            //ListView_Pwad_ContextMenu = (ContextMenu)this.Resources["ListPwad_ContextMenu"]; <--- unneeded for the time being
+
+            Clear_PlaylistContextItem = (MenuItem)ListView_Playlist_ContextMenu.Items[3];
+
+            Playlist_ContextMenu = (ContextMenu)this.ListView_Playlists.Resources["ItemContextMenu"];
+            //I honestly have no idea how else to GET these than using the index they will be in...
+            SaveContextItem = (MenuItem)Playlist_ContextMenu.Items[0];
+            SaveAsContextItem = (MenuItem)Playlist_ContextMenu.Items[1];
+            RenameContextItem = (MenuItem)Playlist_ContextMenu.Items[2];
+
+            //I suppose I could have built them all dymanically like I did with this, but... eh.
+            CategoryHeader = new MenuItem();
+            CategoryHeader.Header = "Category";
+            Playlist_ContextMenu.Items.Add(CategoryHeader);
+
+            //Pwad_ContextMenu = (ContextMenu)this.ListView_Pwads.Resources["ItemContextMenu"]; <--- unneeded for the time being
 
             if (File.Exists(Settings_File))
             {
@@ -62,16 +86,7 @@ namespace YADL
 
             if (UserCategories.Count() > 0)
             {
-                ComboBox_Categories.IsEnabled = true;
-
-                for (int i = 0; i < UserCategories.Count(); i++)
-                {
-                    ComboBox_Categories.Items.Add(UserCategories[i]);
-                }
-            }
-            else
-            {
-                ComboBox_Categories.IsEnabled = false;
+                Categories_Changed = true;
             }
 
             Helper_UI();
@@ -385,7 +400,7 @@ namespace YADL
                 //Console.WriteLine(Args);
             }
 
-
+            //Want to make sure the arguments match what the various Sourceports require before actually launching, but for now this works for at least GZDoom.
             if (CheckBox_Config.IsChecked == true)
             {
                 if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString() != "" && ((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString() != "Not found")
@@ -805,8 +820,6 @@ namespace YADL
             if (Settings.KeyExists("Counter", "Categories"))
             {
                 int Categories = Int32.Parse(Settings.Read("Counter", "Categories"));
-                CategoryHeader = new MenuItem();
-                CategoryHeader.Header = "Category";
 
                 for (int i = 1; i <= Categories; i++)
                 {
@@ -815,14 +828,7 @@ namespace YADL
                     TabItem ti = new TabItem();
                     ti.Header = UserCategories[i - 1];
                     tabControl.Items.Insert(tabControl.Items.Count - 1, ti);
-
-                    MenuItem mi = new MenuItem();
-                    mi.Header = UserCategories[i - 1];
-                    mi.Click += MenuItem_Category_Click;
-                    CategoryHeader.Items.Add(mi);
                 }
-
-                CategoryContextMenu.Items.Add(CategoryHeader);
             }
 
             if (!Settings.KeyExists("Config","Hidden_Features"))
@@ -928,13 +934,15 @@ namespace YADL
             }
         }
 
-        private void Helper_UI()
+        private void Helper_UI() //Manages everything to do with enabling/disabling/controlling UI elements.
         {
-
+            //Manage the Category ComboBox and ContextMenu submenu.
             if(Categories_Changed)
             {
+                //Prevents the SelectedItemsChanged event from firing and calling Helper_UI again and again and again an. . .
                 Categories_Frozen = true;
 
+                //Um, sometimes these would sneak into the Categories list, so this just removes them so they don't become duplicate tabs.
                 while(UserCategories.Contains("All"))
                 {
                     UserCategories.Remove("All");
@@ -949,6 +957,7 @@ namespace YADL
                 CategoryHeader.Items.Clear();
                 ComboBox_Categories.Items.Clear();
 
+                //Add all the elements back, in the correct order
                 for (int i = 0; i < UserCategories.Count; i++)
                 {
                     MenuItem mi = new MenuItem();
@@ -963,6 +972,7 @@ namespace YADL
                 Categories_Changed = false;
             }
 
+            //Resize Playlist ListView's Columns as needed
             if (ListView_Playlists.View is GridView GV_Playlists)
             {
                 foreach (GridViewColumn GVC_Playlists in GV_Playlists.Columns)
@@ -972,6 +982,7 @@ namespace YADL
                 }
             }
 
+            //Manage Width of Pwad ListView's columns based on them being visible or not...
             if (PWadList_LoadColumn_Visible)
             {
                 PwadList_LoadColumn.Width = PwadList_LoadColumn.ActualWidth;
@@ -1000,25 +1011,22 @@ namespace YADL
             { 
                 PwadList_LocationColumn.Width = 0;
             }
-            //if (ListView_Pwads.View is GridView GV_Pwads)
-            //{
 
-            //    foreach (GridViewColumn GVC_Pwads in GV_Pwads.Columns)
-            //    {
-            //        GVC_Pwads.Width = GVC_Pwads.ActualWidth;
-            //        GVC_Pwads.Width = Double.NaN;
-            //    }
-            //}
-
+            //Things that need at least one playlist added to the ListView
             if (ListView_Playlists.Items.Count > 0)
             {
+                TextBox_Playlist_Filter.IsEnabled = true;
+                Clear_PlaylistContextItem.IsEnabled = true;
                 MenuItem_Clear.IsEnabled = true;
             }
             else
             {
+                TextBox_Playlist_Filter.IsEnabled = false;
+                Clear_PlaylistContextItem.IsEnabled = false;
                 MenuItem_Clear.IsEnabled = false;
             }
 
+            //Manage Play button
             if (TextBlock_SourcePort.Text.ToString() == "Not found"
                 | TextBlock_Iwad.Text.ToString() == "Not found"
                 | TextBlock_Config.Text.ToString() == "Not found"
@@ -1035,6 +1043,7 @@ namespace YADL
                 Button_Play.IsEnabled = true;
             }
 
+            //Parameters Checkbox enabled conditions
             if (String.IsNullOrEmpty(TextBlock_SourcePort.Text.ToString()) | ListView_Playlists.SelectedItems.Count > 1)
             {
                 CheckBox_Parameters.IsEnabled = false;
@@ -1044,49 +1053,92 @@ namespace YADL
                 CheckBox_Parameters.IsEnabled = true;
             }
 
+            //Lots of things depend on *how many* items are selected in the Playlists ListView
             if (ListView_Playlists.SelectedItems.Count < 1)
             {
-                Button_Iwad_Open.IsEnabled = false;
+                //Menus and Context Menus for handling Playlists
                 MenuItem_Save.IsEnabled = false;
+                SaveContextItem.IsEnabled = false;
                 MenuItem_SaveAs.IsEnabled = false;
+                SaveAsContextItem.IsEnabled = false;
+                CategoryHeader.IsEnabled = false;
+                RenameContextItem.IsEnabled = false;
+
+                //Playlist Property Stuffz
+                Button_Iwad_Open.IsEnabled = false;
+                Button_SourcePort_Open.IsEnabled = false;
+                ComboBox_Categories.IsEnabled = false;
+                Button_Config_Open.IsEnabled = false;
+                Button_Savedir_Open.IsEnabled = false;
+
+                CheckBox_Config.IsEnabled = false;
+                CheckBox_SaveDir.IsEnabled = false;
+
+                ListView_Pwads.IsEnabled = false;
+                //Context Menus and Buttons for managing pwads
                 Button_Pwad_Clear.IsEnabled = false;
                 Button_Pwad_Import.IsEnabled = false;
                 Button_Pwad_Open.IsEnabled = false;
-                Button_SourcePort_Open.IsEnabled = false;
-                CheckBox_Config.IsEnabled = false;
-                CheckBox_SaveDir.IsEnabled = false;
-                ListView_Pwads.IsEnabled = false;
 
-                Button_Config_Open.IsEnabled = false;
-                Button_Savedir_Open.IsEnabled = false;
-                ComboBox_Categories.IsEnabled = false;
                 TextBox_PWad_Filter.IsEnabled = false;
 
-                CategoryHeader.IsEnabled = false;
-
-                RenameMenuItem.IsEnabled = false;
             }
             else if (ListView_Playlists.SelectedItems.Count == 1)
             {
-                Button_Iwad_Open.IsEnabled = true;
+                //Menus and Context Menus for handling Playlists
                 MenuItem_Save.IsEnabled = true;
+                SaveContextItem.IsEnabled = true;
                 MenuItem_SaveAs.IsEnabled = true;
-                Button_Pwad_Clear.IsEnabled = true;
-                Button_Pwad_Import.IsEnabled = true;
-                Button_Pwad_Open.IsEnabled = true;
+                SaveAsContextItem.IsEnabled = true;
+                //CategoryHeader.IsEnabled = true; <--- Handled below
+                RenameContextItem.IsEnabled = true;
+
+                //Playlist Property Stuffz
+                Button_Iwad_Open.IsEnabled = true;
                 Button_SourcePort_Open.IsEnabled = true;
+                //ComboBox_Categories.IsEnabled = true; <--- Handled below
+                //Button_Config_Open.IsEnabled = true; <--- Handled below
+                //Button_Savedir_Open.IsEnabled = true; <--- Handled below
+
                 CheckBox_Config.IsEnabled = true;
                 CheckBox_SaveDir.IsEnabled = true;
+                
                 ListView_Pwads.IsEnabled = true;
+                //Context Menus and Buttons for managing playlists
+                //Button_Pwad_Clear.IsEnabled = true; <--- Handled below
+                Button_Pwad_Import.IsEnabled = true;
+                Button_Pwad_Open.IsEnabled = true;
 
-                Button_Config_Open.IsEnabled = true;
-                Button_Savedir_Open.IsEnabled = true;
-                TextBox_PWad_Filter.IsEnabled = true;
+                //Savedir/Config buttons depend on the checkbox being checked
+                if (CheckBox_Config.IsChecked == true)
+                {
+                    Button_Config_Open.IsEnabled = true;
+                }
+                else
+                {
+                    Button_Config_Open.IsEnabled = false;
+                }
 
-                RenameMenuItem.IsEnabled = true;
+                if (CheckBox_SaveDir.IsChecked == true)
+                {
+                    Button_Savedir_Open.IsEnabled = true;
+                }
+                else
+                {
+                    Button_Savedir_Open.IsEnabled = false;
+                }
 
+                //TextBox_PWad_Filter.IsEnabled = true;
+                if (((Playlists)ListView_Playlists.SelectedItem).Wadlist.Count > 0)
+                {
+                    Button_Pwad_Clear.IsEnabled = true;
+                    TextBox_PWad_Filter.IsEnabled = true;
+                }
+
+                //Manage Selected Categories
                 if (UserCategories.Count() > 0)
                 {
+                    //Prevents the SelectedItemsChanged event from firing over and over...
                     Categories_Frozen = true;
 
                     ComboBox_Categories.SelectedItems.Clear();
@@ -1109,66 +1161,50 @@ namespace YADL
             }
             else
             {
-                Button_Iwad_Open.IsEnabled = false;
+                //Menus and Context Menus for handling Playlists
                 MenuItem_Save.IsEnabled = true;
+                SaveContextItem.IsEnabled = true;
                 MenuItem_SaveAs.IsEnabled = true;
+                SaveAsContextItem.IsEnabled = true;
+                //CategoryHeader.IsEnabled = false; <--- Handled below again
+                RenameContextItem.IsEnabled = false;
+
+                //Playlist Property Stuffz
+                Button_Iwad_Open.IsEnabled = false;
+                Button_SourcePort_Open.IsEnabled = false;
+                ComboBox_Categories.IsEnabled = false; //<--- Could maybe enable and populate this as below, but... eh...
+                Button_Config_Open.IsEnabled = false;
+                Button_Savedir_Open.IsEnabled = false;
+
+                CheckBox_Config.IsEnabled = false;
+                CheckBox_SaveDir.IsEnabled = false;
+
+                ListView_Pwads.IsEnabled = false;
+                //Context Menus and Buttons for managing playlists
                 Button_Pwad_Clear.IsEnabled = false;
                 Button_Pwad_Import.IsEnabled = false;
                 Button_Pwad_Open.IsEnabled = false;
-                Button_SourcePort_Open.IsEnabled = false;
-                CheckBox_Config.IsEnabled = false;
-                CheckBox_SaveDir.IsEnabled = false;
-                ListView_Pwads.IsEnabled = false;
 
-                Button_Config_Open.IsEnabled = false;
-                Button_Savedir_Open.IsEnabled = false;
-                ComboBox_Categories.IsEnabled = false;
                 TextBox_PWad_Filter.IsEnabled = false;
 
-                CategoryHeader.IsEnabled = true;
-
-                RenameMenuItem.IsEnabled = false;
-
-                for (int i=0; i < UserCategories.Count; i++)
+                if(UserCategories.Count > 0)
                 {
-                    ((MenuItem)CategoryHeader.Items[i]).IsChecked = true;
+                    CategoryHeader.IsEnabled = true;
 
-                    for(int j = 0; j < ListView_Playlists.SelectedItems.Count; j++)
+                    for (int i = 0; i < UserCategories.Count; i++)
                     {
-                        if (((Playlists)ListView_Playlists.SelectedItems[j]).Playlist_Categories.Contains(UserCategories[i]) == false)
+                        ((MenuItem)CategoryHeader.Items[i]).IsChecked = true;
+
+                        for (int j = 0; j < ListView_Playlists.SelectedItems.Count; j++)
                         {
-                            ((MenuItem)CategoryHeader.Items[i]).IsChecked = false;
-                            break;
+                            if (((Playlists)ListView_Playlists.SelectedItems[j]).Playlist_Categories.Contains(UserCategories[i]) == false)
+                            {
+                                ((MenuItem)CategoryHeader.Items[i]).IsChecked = false;
+                                break;
+                            }
                         }
                     }
                 }
-            }
-
-            if (ListView_Pwads.Items.Count < 1 | ListView_Playlists.SelectedItems.Count > 1)
-            {
-                Button_Pwad_Clear.IsEnabled = false;
-            }
-            else
-            {
-                Button_Pwad_Clear.IsEnabled = true;
-            }
-
-            if (CheckBox_Config.IsChecked == true)
-            {
-                Button_Config_Open.IsEnabled = true;
-            }
-            else
-            {
-                Button_Config_Open.IsEnabled = false;
-            }
-
-            if (CheckBox_SaveDir.IsChecked == true)
-            {
-                Button_Savedir_Open.IsEnabled = true;
-            }
-            else
-            {
-                Button_Savedir_Open.IsEnabled = false;
             }
         }
 
@@ -1492,6 +1528,8 @@ namespace YADL
             UserCategories.Insert(tabControl.Items.IndexOf(tabTarget) - 1, tabSource.Header.ToString());
 
             Categories_Changed = true;
+
+            Helper_Filter();
 
             Helper_UI();
         }
