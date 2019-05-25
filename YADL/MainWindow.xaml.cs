@@ -580,6 +580,8 @@ namespace YADL
 
         private async void Helper_Playlists(List<string> Files)
         {
+            Playlists Playlist = null;
+
             foreach (var File in Files)
             {
                 FileInfo File_Info = new FileInfo(File);
@@ -666,11 +668,17 @@ namespace YADL
                     var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_FileName.ToLower() == Path.GetFileNameWithoutExtension(File_Info.Name).ToLower() & x.Playlist_Location.ToLower() == Playlist_Location.ToLower()));
                     if (Duplicate == null)
                     {
-                        Playlists Playlist = new Playlists(false, false, Playlist_Name, Path.GetFileNameWithoutExtension(File_Info.Name), Playlist_Files, Playlist_Location, Playlist_Sourceport, Playlist_SourcePort_HasParameters, Playlist_SourcePort_Parameters, Playlist_Iwad, Playlist_Categories, Playlist_Savedir, Playlist_HasSavedir, Playlist_HasConfig, Playlist_Config, Playlist_Wads);
+                        Playlist = new Playlists(false, false, Playlist_Name, Path.GetFileNameWithoutExtension(File_Info.Name), Playlist_Files, Playlist_Location, Playlist_Sourceport, Playlist_SourcePort_HasParameters, Playlist_SourcePort_Parameters, Playlist_Iwad, Playlist_Categories, Playlist_Savedir, Playlist_HasSavedir, Playlist_HasConfig, Playlist_Config, Playlist_Wads);
                         VM.Playlist.Add(Playlist);
                     }
                 }
             }
+
+            if (Files.Count == 1 && Playlist != null)
+            {
+                ListView_Playlists.SelectedItem = Playlist;
+            }
+
             Helper_UI();
         }
 
@@ -1146,9 +1154,12 @@ namespace YADL
                     ComboBox_Categories.IsEnabled = true;
                     CategoryHeader.IsEnabled = true;
 
-                    for (int i = 0; i < ((Playlists)ListView_Playlists.SelectedItem).Playlist_Categories.Count; i++)
+                    for (int i = 0; i < UserCategories.Count; i++)
                     {
-                        ComboBox_Categories.SelectedItems.Add(((Playlists)ListView_Playlists.SelectedItem).Playlist_Categories[i]);
+                        if(((Playlists)ListView_Playlists.SelectedItem).Playlist_Categories.Contains(UserCategories[i]))
+                        {
+                            ComboBox_Categories.SelectedItems.Add(UserCategories[i]);
+                        }
                     }
 
                     for (int i = 0; i < UserCategories.Count; i++)
@@ -1450,12 +1461,16 @@ namespace YADL
                 if (!Categories_Frozen)
                 {
                     //Remove any Categories that aren't in the ComboBox's selected items
+                    //but... only IF the category exists in the combobox at all.
                     for (int i = 0; i < PlaylistCategories.Count; i++)
                     {
-                        if (!ComboBox_Categories.SelectedItems.Contains(PlaylistCategories[i]))
+                        if(ComboBox_Categories.Items.Contains(PlaylistCategories[i]))
                         {
-                            PlaylistCategories.Remove(PlaylistCategories[i]);
-                            madeChanges = true;
+                            if (!ComboBox_Categories.SelectedItems.Contains(PlaylistCategories[i]))
+                            {
+                                PlaylistCategories.Remove(PlaylistCategories[i]);
+                                madeChanges = true;
+                            }
                         }
                     }
 
@@ -1472,9 +1487,8 @@ namespace YADL
                     if (madeChanges)
                     {
                         ((Playlists)ListView_Playlists.SelectedItem).Playlist_Changed = true;
+                        Helper_Filter();
                     }
-
-                    Helper_Filter();
                 }
 
             }
