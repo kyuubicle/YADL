@@ -2,7 +2,7 @@
 It's... well, yet another doom launcher. YADL. Yeah. *ahem*
 
 It's tool to help keep track of and launch Doom Engine games and mods.  
-It's based off of the source of another launcher: Doomie.
+It's based off of the source of another launcher: [Doomie.](https://forum.zdoom.org/viewtopic.php?f=44&t=61647)
 
 # What's new from Doomie 1.7?
 - When Creating a New Playlist or Opening a single playlist, that playlist will be automatically selected.
@@ -42,13 +42,13 @@ It's based off of the source of another launcher: Doomie.
   - Can now use the same Double-Click, Space Bar/Enter methods as the pwad list
 
 # CREDITS
-YADL is a fork of Doomie 1.6 by buja-buja: https://forum.zdoom.org/viewtopic.php?f=44&t=61647
-  - Original Doomie can be downloaded at: http://www.mediafire.com/file/oozoqoer362o6rq/Doomie+Release+1.7.zip
-  - Original Doomie 1.6 source can be downloaded at: http://www.mediafire.com/file/o8ssed5gvumyamz/Doomie_Source_1.6.7z
+YADL is a fork of [Doomie 1.6 by buja-buja](https://forum.zdoom.org/viewtopic.php?f=44&t=61647)
+  - Original Doomie can be downloaded [here](http://www.mediafire.com/file/oozoqoer362o6rq/Doomie+Release+1.7.zip)
+  - Original Doomie 1.6 source can be downloaded [here](http://www.mediafire.com/file/o8ssed5gvumyamz/Doomie_Source_1.6.7z)
 
 YADL also uses two libraries:
-- Extended WPF Toolkit: https://github.com/xceedsoftware/wpftoolkit
-- GongSolutions.WPF.DragDrop: https://github.com/punker76/gong-wpf-dragdrop
+- [Extended WPF Toolkit](https://github.com/xceedsoftware/wpftoolkit)
+- [GongSolutions.WPF.DragDrop](https://github.com/punker76/gong-wpf-dragdrop)
 
 # License
 100% Freeware. 95% of this project is buja-buja's work. So, abide by their own rules first and foremost:
