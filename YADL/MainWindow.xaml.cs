@@ -1594,10 +1594,19 @@ namespace YADL
 
         private void TabControl_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //Forces the tab to be selected.
-            tabControl.SelectedItem = sender as TabItem;
+
+            if ((sender as TabItem).Header.ToString() != "+")
+            {
+                //Forces the tab to be selected.
+                tabControl.SelectedItem = sender as TabItem;
+            }
+            else
+            {
+                tabControl.SelectedItem = tabControl.Items[0];
+            }
 
             Helper_Filter();
+
         }
 
         private void ContextItem_RenameCategory_Click(object sender, RoutedEventArgs e)
