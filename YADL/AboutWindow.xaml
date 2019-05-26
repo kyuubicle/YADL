@@ -1,8 +1,8 @@
 ﻿<Window x:Class="YADL.AboutWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:YADL" mc:Ignorable="d"
         Title="About" 
-        Height="320" 
-        Width="320"
+        Height="350.914" 
+        Width="419.426"
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner">
 
@@ -21,7 +21,7 @@
 
         <Image 
         Source="Doomie.ico" Width="32" Grid.Column="0" Grid.Row="0"/>
-        
+
         <Label 
         Content="Yet Another Doom Launcher" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
         <Label 
@@ -45,9 +45,9 @@
                         <RowDefinition/>
 
                     </Grid.RowDefinitions>
-                    
+
                     <Label 
-                    Content="Version 1.8" FontWeight="Bold" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    Content="Version 0.7" FontWeight="Bold" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
 
                     <Label 
                     Content="Doomie written by buja-buja in 2018" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -76,22 +76,41 @@
 
             <TabItem Header="Version log">
                 <ScrollViewer>
-                    
+
                     <StackPanel Orientation="Vertical" Margin="6 0 6 6">
-                        <Expander IsExpanded="true" Header="Version 1.1 (05/09/2018)" FontWeight="Bold" Margin="0 6 0 0">
+                        <Expander IsExpanded="true" Header="Version 0.7 (05/19/2019)" FontWeight="Bold" Margin="0 6 0 0">
                             <TextBlock Margin="24 6 6 0" FontWeight="Normal" TextWrapping="Wrap">
-                                ▪ Added ability to easily specify a different Saved Game location and Config file per playlist
+                                ▪ When creating a new playlist, the playlist will be automatically selected.
+                                <LineBreak/>
+                                ▪ Can now rename playlists (doesn't change the file name)
+                                <LineBreak/>
+                                ▪ Added Context Menu on Playlist List
+                                <LineBreak/>
+                                ▪ Added Context Menu on Pwad List
                             </TextBlock>
                         </Expander>
-                        <Expander IsExpanded="false" Header="Version 1.0 (05/07/2018)" FontWeight="Bold" Margin="0 6 0 0">
+                        <Expander IsExpanded="false" Header="Version 0.5 (05/19/2019)" FontWeight="Bold" Margin="0 6 0 0">
                             <TextBlock Margin="24 6 6 0" FontWeight="Normal" TextWrapping="Wrap">
+                                ▪ Can now specify Categories to help further organize Playlists.
+                                <LineBreak/>
+                                ▪ Allows hiding of Load/Merge/Location fields in PWAD list.
+                                <LineBreak/>
+                                ▪ Wads can be loaded/unloaded by double-clicking them.
+                                <LineBreak/>
+                                ▪ Wads can also be loaded/unloaded by pressing the spacebar or enter key while selected
+                            </TextBlock>
+                        </Expander>
+                        <Expander IsExpanded="false" Header="Version 0.1 (05/07/2019)" FontWeight="Bold" Margin="0 6 0 0">
+                            <TextBlock Margin="24 6 6 0" FontWeight="Normal" TextWrapping="Wrap">
+                                ▪ Modified UI slightly
+                                <LineBreak/>
                                 ▪ Forked from Doomie 1.6
                             </TextBlock>
                         </Expander>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            
+
             <TabItem Header="License">
                 <ScrollViewer>
                     <TextBlock Margin="6" TextWrapping="Wrap">
