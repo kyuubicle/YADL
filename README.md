@@ -25,18 +25,19 @@ It's based off of the source of another launcher: Doomie.
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
 # TODO
+- [ ] Remember last category/playlist on startup
+- [ ] Better looking Text Prompts
+- [ ] Default pwad list to load with any playlist
 - [X] Add direct Config/Save Directory settings 
   - They are present, but they are only setup to work with GZDoom for now, so are disabled/hidden by default
     - Can enable by adding the following to your YADL.cfg:
       > [Hidden_Features]  
       > Config=yes  
       > SaveDir=yes  
-- [ ] Remember last category/playlist on startup
 - [X] Removing Categories.
   - When removing a Category, it will remove it from the UI only. Playlists will still keep the Category in their file in case the Category is added back later.
 - [X] Renaming Categories
   - When renaming a Category, all playlists with that category will use the new category name.
-- [ ] Better looking Text Prompts
 - [X] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
   - Can now use the same Double-Click, Space Bar/Enter methods as the pwad list
 
