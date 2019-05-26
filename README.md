@@ -37,7 +37,8 @@ It's based off of the source of another launcher: Doomie.
 - [X] Renaming Categories
   - When renaming a Category, all playlists with that category will use the new category name.
 - [ ] Better looking Text Prompts
-- [ ] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
+- [X] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
+  - Can now use the same Double-Click, Space Bar/Enter methods as the pwad list
 
 # CREDITS
 YADL is a fork of Doomie 1.6 by buja-buja: https://forum.zdoom.org/viewtopic.php?f=44&t=61647
