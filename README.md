@@ -38,7 +38,7 @@ It's based off of the source of another launcher: [Doomie.](https://forum.zdoom.
 - [X] Removing Categories.
   - When removing a Category, it will remove it from the UI only. Playlists will still keep the Category in their file in case the Category is added back later.
 - [X] Renaming Categories
-  - When renaming a Category, all playlists with that category will use the new category name.
+  - When renaming a Category, all currently loaded playlists with that category will be updated to use the new category name.
 - [X] Better multi-select/deselect methods for the exit program 'Save Playlists' form.
   - Can now use the same Double-Click, Space Bar/Enter methods as the pwad list
 
