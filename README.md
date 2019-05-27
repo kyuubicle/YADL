@@ -25,6 +25,7 @@ It's based off of the source of another launcher: [Doomie.](https://forum.zdoom.
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
 # TODO
+- [ ] Allow directly specifying an icon for a playlist
 - [ ] Remember last category/playlist on startup
 - [ ] Better looking Text Prompts
 - [ ] Default pwad list to load with any playlist
