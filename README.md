@@ -4,9 +4,12 @@ It's... well, yet another doom launcher. YADL. Yeah. *ahem*
 It's tool to help keep track of and launch Doom Engine games and mods.  
 It's based off of the source of another launcher: [Doomie.](https://forum.zdoom.org/viewtopic.php?f=44&t=61647)
 
+It's mostly something I modifed/created for my own use, but others might find it useful!
+
 # What's new from Doomie 1.7?
 - When Creating a New Playlist or Opening a single playlist, that playlist will be automatically selected.
   - No playlist will be selected when *importing* a directory of playlists.
+- Can launch a playlist by double-clicking
 - Can now rename playlists (without saving it as a new file)
 - Can now specify Categories tabs to help further organize Playlists.
   - Playlists can be a part of any number of categories.
