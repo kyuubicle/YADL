@@ -354,75 +354,7 @@ namespace YADL
 
         private void Button_Play_Click(object sender, RoutedEventArgs e)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = Label_SourcePort.ToolTip.ToString();
-            string Args = " -iwad " + AddQuotesIfRequired(@Label_IWad.ToolTip.ToString());
-            if (ListView_Pwads.Items.Count > 0)
-            {
-                foreach (Wads Wad in ListView_Pwads.Items)
-                {
-                    if (Wad.Wad_Load == true)
-                    {
-                        if (Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".wad"
-                         | Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".pk3"
-                         | Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".pk7")
-                        {
-                            if (Wad.Wad_Merge == false)
-                            {
-                                Args = Args + " -file " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
-                            }
-                            else
-                            {
-                                Args = Args + " -merge " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
-                            }
-                        }
-                        else if (Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".deh")
-                        {
-                            Args = Args + " -deh " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
-                        }
-                        else if (Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".bex")
-                        {
-                            Args = Args + " -bex " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
-                        }
-                        else
-                        {
-                            if (Wad.Wad_Merge == false)
-                            {
-                                Args = Args + " -file " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
-                            }
-                            else
-                            {
-                                Args = Args + " -merge " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
-                            }
-                        }
-                    }
-                }
-                //Console.WriteLine(Args);
-            }
-
-            //Want to make sure the arguments match what the various Sourceports require before actually launching, but for now this works for at least GZDoom.
-            if (CheckBox_Config.IsChecked == true)
-            {
-                if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString() != "" && ((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString() != "Not found")
-                {
-                    Args = Args + " -config " + AddQuotesIfRequired(((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString());
-                }
-            }
-
-            if (CheckBox_SaveDir.IsChecked == true)
-            {
-                if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Savedir.ToString() != "" && ((Playlists)ListView_Playlists.SelectedItem).Playlist_Savedir.ToString() != "Not found")
-                {
-                    Args = Args + " -savedir " + AddQuotesIfRequired(((Playlists)ListView_Playlists.SelectedItem).Playlist_Savedir.ToString());
-                }
-            }
-
-            if (((Playlists)ListView_Playlists.SelectedItem).Playlist_SourcePort_Parameters.ToString() != "")
-            {
-                Args = Args + " " + ((Playlists)ListView_Playlists.SelectedItem).Playlist_SourcePort_Parameters.ToString();
-            }
-            process.StartInfo.Arguments = Args;
-            process.Start();
+            Helper_Launch();
         }
 
         private void ItemContextMenu_Playlists_Remove_Click(object sender, RoutedEventArgs e)
@@ -1633,6 +1565,91 @@ namespace YADL
 
                 Categories_Changed = true;
                 Helper_Filter();
+            }
+        }
+
+        private void Helper_Launch()
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = Label_SourcePort.ToolTip.ToString();
+            string Args = " -iwad " + AddQuotesIfRequired(@Label_IWad.ToolTip.ToString());
+            if (ListView_Pwads.Items.Count > 0)
+            {
+                foreach (Wads Wad in ListView_Pwads.Items)
+                {
+                    if (Wad.Wad_Load == true)
+                    {
+                        if (Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".wad"
+                         | Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".pk3"
+                         | Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".pk7")
+                        {
+                            if (Wad.Wad_Merge == false)
+                            {
+                                Args = Args + " -file " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
+                            }
+                            else
+                            {
+                                Args = Args + " -merge " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
+                            }
+                        }
+                        else if (Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".deh")
+                        {
+                            Args = Args + " -deh " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
+                        }
+                        else if (Path.GetExtension(Path.Combine(Wad.Wad_Location, Wad.Wad_File)).ToLower() == ".bex")
+                        {
+                            Args = Args + " -bex " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
+                        }
+                        else
+                        {
+                            if (Wad.Wad_Merge == false)
+                            {
+                                Args = Args + " -file " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
+                            }
+                            else
+                            {
+                                Args = Args + " -merge " + AddQuotesIfRequired(@Path.Combine(Wad.Wad_Location, Wad.Wad_File).ToString());
+                            }
+                        }
+                    }
+                }
+                //Console.WriteLine(Args);
+            }
+
+            //Want to make sure the arguments match what the various Sourceports require before actually launching, but for now this works for at least GZDoom.
+            if (CheckBox_Config.IsChecked == true)
+            {
+                if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString() != "" && ((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString() != "Not found")
+                {
+                    Args = Args + " -config " + AddQuotesIfRequired(((Playlists)ListView_Playlists.SelectedItem).Playlist_Config.ToString());
+                }
+            }
+
+            if (CheckBox_SaveDir.IsChecked == true)
+            {
+                if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Savedir.ToString() != "" && ((Playlists)ListView_Playlists.SelectedItem).Playlist_Savedir.ToString() != "Not found")
+                {
+                    Args = Args + " -savedir " + AddQuotesIfRequired(((Playlists)ListView_Playlists.SelectedItem).Playlist_Savedir.ToString());
+                }
+            }
+
+            if (((Playlists)ListView_Playlists.SelectedItem).Playlist_SourcePort_Parameters.ToString() != "")
+            {
+                Args = Args + " " + ((Playlists)ListView_Playlists.SelectedItem).Playlist_SourcePort_Parameters.ToString();
+            }
+            process.StartInfo.Arguments = Args;
+            process.Start();
+
+        }
+
+        private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if(ListView_Playlists.SelectedItems.Count == 1)
+            {
+                if(Button_Play.IsEnabled)
+                {
+                    Helper_Launch();
+                }
             }
         }
     }
