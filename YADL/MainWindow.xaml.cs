@@ -47,6 +47,7 @@ namespace YADL
         MenuItem SaveContextItem;
         MenuItem SaveAsContextItem;
         MenuItem RenameContextItem;
+        MenuItem OpenLocationContextItem;
 
         //ContextMenu Pwad_ContextMenu;
 
@@ -66,6 +67,9 @@ namespace YADL
             SaveContextItem = (MenuItem)Playlist_ContextMenu.Items[0];
             SaveAsContextItem = (MenuItem)Playlist_ContextMenu.Items[1];
             RenameContextItem = (MenuItem)Playlist_ContextMenu.Items[2];
+
+            //I'm too lazy to stick to a consistent style for casting items, sue me.
+            OpenLocationContextItem = ((ContextMenu)ListView_Pwads.Resources["ItemContextMenu"]).Items[3] as MenuItem;
 
             //I suppose I could have built them all dymanically like I did with this, but... eh.
             CategoryHeader = new MenuItem();
@@ -105,6 +109,13 @@ namespace YADL
             {
                 Folder_Playlists_New = Path.GetDirectoryName(Playlist_New_File.FileName);
                 Playlists Playlist = new Playlists(true, false, Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), 0, Path.GetDirectoryName(Playlist_New_File.FileName), "", false, "", "");
+
+                //Adds the current category to the new item
+                if(((TabItem)tabControl.SelectedItem).Header.ToString() != "All")
+                {
+                    Playlist.Playlist_Categories.Add(((TabItem)tabControl.SelectedItem).Header.ToString());
+                }
+                
                 var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_FileName.ToLower() == Path.GetFileNameWithoutExtension(Playlist_New_File.FileName).ToLower() & x.Playlist_Location.ToLower() == Path.GetDirectoryName(Playlist_New_File.FileName).ToLower()));
                 if (Duplicate != null)
                 {
@@ -953,6 +964,15 @@ namespace YADL
                 PwadList_LocationColumn.Width = 0;
             }
 
+            if (ListView_Pwads.SelectedItems.Count == 1)
+            {
+                OpenLocationContextItem.IsEnabled = true;
+            }
+            else
+            {
+                OpenLocationContextItem.IsEnabled = false;
+            }
+
             //Things that need at least one playlist added to the ListView
             if (ListView_Playlists.Items.Count > 0)
             {
@@ -1651,6 +1671,13 @@ namespace YADL
                     Helper_Launch();
                 }
             }
+        }
+
+        private void ItemContextMenu_Pwads_Open_Explorer_Click(object sender, RoutedEventArgs e)
+        {
+            string path = ((Wads)ListView_Pwads.SelectedItem).Wad_Location;
+
+            Process.Start(path);
         }
     }
 }

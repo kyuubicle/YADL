@@ -17,9 +17,9 @@
             <MenuItem Header="Clear" ToolTip="Removes all listed Playlists entries" Click="MenuItem_PlaylistClear_Click" />
         </ContextMenu>
         <ContextMenu x:Key="ListPwad_ContextMenu">
-            <MenuItem x:Name="MenuItem_OpenPWad" Header="Add..." ToolTip="Adds a pWad file to the Playlist" Click="Button_Pwad_Open_Click"/>
+            <MenuItem x:Name="MenuItem_OpenPWad" Header="Add..." ToolTip="Adds a pwad file to the Playlist" Click="Button_Pwad_Open_Click"/>
             <MenuItem x:Name="MenuItem_ImportPwad" Header="Import..." ToolTip="Imports all PWad files from a given directory into the Playlist" Click="Button_Pwad_Import_Click"/>
-            <MenuItem x:Name="MenuItem_ClearPwad" Header="Clear" ToolTip="Removes all PWad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
+            <MenuItem x:Name="MenuItem_ClearPwad" Header="Clear" ToolTip="Removes all pwad files from the Playlist" Click="Button_Pwad_Clear_Click"/>
         </ContextMenu>
         <DataTemplate x:Key="CheckBox_Load">
             <StackPanel Orientation="Horizontal">
@@ -353,7 +353,7 @@
                             <ContextMenu x:Key="HeaderContextMenu">
                                 <MenuItem x:Name="ColumnLoad_View_Toggle" Header="Load" IsCheckable="True" IsChecked="True" Click="ColumnLoad_View_Toggle_Click"/>
                                 <MenuItem x:Name="ColumnMerge_View_Toggle" Header="Merge" IsCheckable="True" IsChecked="True" Click="ColumnMerge_View_Toggle_Click"/>
-                                <MenuItem x:Name="ColumnPWad_View_Toggle" Header="PWad" IsCheckable="True" IsChecked="True" IsEnabled="False"/>
+                                <MenuItem x:Name="ColumnPWad_View_Toggle" Header="Pwad" IsCheckable="True" IsChecked="True" IsEnabled="False"/>
                                 <MenuItem x:Name="ColumnLocation_View_Toggle" Header="Location" IsCheckable="True" IsChecked="True" Click="ColumnLocation_View_Toggle_Click"/>
                             </ContextMenu>
                             <ContextMenu x:Key="ItemContextMenu">
@@ -366,6 +366,7 @@
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Toggle_Load" Header="Load" Click="ItemContextMenu_Pwads_Toggle_Load_Click" IsChecked="{Binding Wad_Load}"/>
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Toggle_Merge" Header="Merge" Click="ItemContextMenu_Pwads_Toggle_Merge_Click" IsChecked="{Binding Wad_Merge}" />
                                 <Separator/>
+                                <MenuItem x:Name="ItemContextMenu_Pwads_Open_Explorer" Header="Open file location..." Click="ItemContextMenu_Pwads_Open_Explorer_Click"/>
                                 <MenuItem x:Name="ItemContextMenu_Pwads_Remove" Header="Remove Pwad(s)" Click="ItemContextMenu_Pwads_Remove_Click"/>
                             </ContextMenu>
                         </ListView.Resources>
