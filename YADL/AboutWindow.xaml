@@ -19,18 +19,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Image 
-        Source="Doomie.ico" Width="32" Grid.Column="0" Grid.Row="0"/>
+        <!-- <Image Source=".ico" Width="32" Grid.Column="0" Grid.Row="0"/> -->
 
-        <Label 
-        Content="Yet Another Doom Launcher" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
-        <Label 
-        Content="Based on Doomie 1.6" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+        <Label Content="Yet Another Doom Launcher" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+        <Label Content="Based on Doomie 1.6" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
 
-        <Label 
-        Content="A simple frontend launcher for id Tech 1 source ports." Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+        <Label Content="A simple frontend launcher for id Tech 1 source ports." Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
 
-        <TabControl Grid.Row="3" Margin="0 6 0 0">
+        <TabControl Grid.Row="3" Margin="0 6 0 0" Height="250">
             <TabItem Header="Information">
                 <Grid Margin="6">
 
@@ -46,29 +42,21 @@
 
                     </Grid.RowDefinitions>
 
-                    <Label 
-                    Content="Version 0.7" FontWeight="Bold" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    <Label Content="Version 0.71a" FontWeight="Bold" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
 
-                    <Label 
-                    Content="Doomie written by buja-buja in 2018" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Content="Doomie written by buja-buja in 2018" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                    <Label 
-                    Content="Modified by kyuubicle in 2019" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                    <Label 
-                    Content="Icon artwork by NightFright" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Content="Modified by kyuubicle in 2019" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                     <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                    Uses
-                        <Hyperlink 
-                        NavigateUri="https://github.com/punker76/gong-wpf-dragdrop" 
-                        RequestNavigate="Hyperlink_RequestNavigate">
-                        GongSolutions.WPF.DragDrop
+                        Uses
+                        <Hyperlink NavigateUri="https://github.com/punker76/gong-wpf-dragdrop" RequestNavigate="Hyperlink_RequestNavigate">
+                            GongSolutions.WPF.DragDrop
                         </Hyperlink>
-                    <LineBreak/>
+                        <LineBreak/>
                         and
                         <Hyperlink NavigateUri="https://github.com/xceedsoftware/wpftoolkit" RequestNavigate="Hyperlink_RequestNavigate">Extended WPF Toolkit</Hyperlink>
-                        libraries
+                        libraries.
                     </TextBlock>
 
                 </Grid>
