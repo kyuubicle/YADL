@@ -66,9 +66,9 @@
                 <ScrollViewer>
 
                     <StackPanel Orientation="Vertical" Margin="6 0 6 6">
-                        <Expander IsExpanded="true" Header="Version 0.7 (05/19/2019)" FontWeight="Bold" Margin="0 6 0 0">
+                        <Expander IsExpanded="true" Header="Version 0.71a (06/02/2019)" FontWeight="Bold" Margin="0 6 0 0">
                             <TextBlock Margin="24 6 6 0" FontWeight="Normal" TextWrapping="Wrap">
-                                ▪ When creating a new playlist, the playlist will be automatically selected.
+                                ▪ When creating a new playlist, the playlist will be automatically selected and the current category will be auto-assigned to the playlist.
                                 <LineBreak/>
                                 ▪ Can now rename playlists (doesn't change the file name)
                                 <LineBreak/>
