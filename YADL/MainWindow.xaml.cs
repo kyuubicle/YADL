@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+//using System.Windows.Input;
 
 namespace YADL
 {
@@ -1474,6 +1475,16 @@ namespace YADL
 
         private void ListView_Pwads_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            if(e.Key == System.Windows.Input.Key.Delete)
+            {
+                var Selected_Pwads = ListView_Pwads.SelectedItems.Cast<object>().ToList();
+                foreach (Wads Pwad in Selected_Pwads)
+                {
+                    ((Playlists)ListView_Playlists.SelectedItem).Wadlist.Remove(Pwad);
+                    ((Playlists)ListView_Playlists.SelectedItem).Playlist_Files = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.Count;
+                }
+            }
+
             if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.Enter)
             {
                 var Selected_Pwads = ListView_Pwads.SelectedItems;

@@ -7,7 +7,8 @@
         MinHeight="350"
         MinWidth="560"
         Width="640" 
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+ >
 
     <Window.Resources>
         <ContextMenu x:Key="ListPlaylist_ContextMenu">
@@ -44,11 +45,11 @@
 
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New..."  x:Name="MenuItem_Playlist_New" Click="MenuItem_PlaylistNew_Click"  ToolTip="Creates a new empty Playlist" />
-                <MenuItem Header="_Open..." x:Name="MenuItem_Playlist_Open" Click="MenuItem_PlaylistOpen_Click" ToolTip="Opens a Playlist" />
-                <MenuItem Header="_Import..." x:Name="MenuItem_Playlist_Import" Click="MenuItem_PlaylistImport_Click" ToolTip="Imports all Playlists from a directory" />
-                <MenuItem Header="_Save" x:Name="MenuItem_Save" Click="MenuItem_PlaylistSave_Click" ToolTip="Saves the selected Playlist(s)" />
-                <MenuItem Header="Save _As..." x:Name="MenuItem_SaveAs" Click="MenuItem_PlaylistSaveAs_Click" ToolTip="Saves the selected Playlist(s) as new Playlist(s)" />
+                <MenuItem Header="_New..."  x:Name="MenuItem_Playlist_New" Click="MenuItem_PlaylistNew_Click"  ToolTip="Creates a new empty Playlist" AutomationProperties.AcceleratorKey="Control N"/>
+                <MenuItem Header="_Open..." x:Name="MenuItem_Playlist_Open" Click="MenuItem_PlaylistOpen_Click" ToolTip="Opens a Playlist" AutomationProperties.AcceleratorKey="Control O"/>
+                <MenuItem Header="_Import..." x:Name="MenuItem_Playlist_Import" Click="MenuItem_PlaylistImport_Click" ToolTip="Imports all Playlists from a directory" AutomationProperties.AcceleratorKey="Control I"/>
+                <MenuItem Header="_Save" x:Name="MenuItem_Save" Click="MenuItem_PlaylistSave_Click" ToolTip="Saves the selected Playlist(s)" AutomationProperties.AcceleratorKey="Control S"/>
+                <MenuItem Header="Save _As..." x:Name="MenuItem_SaveAs" Click="MenuItem_PlaylistSaveAs_Click" ToolTip="Saves the selected Playlist(s) as new Playlist(s)" AutomationProperties.AcceleratorKey="Control Shift S"/>
                 <MenuItem Header="_Clear" x:Name="MenuItem_Clear" Click="MenuItem_PlaylistClear_Click" ToolTip="Removes all listed Playlists entries" />
                 <Separator />
                 <MenuItem Header="Save S_ession" x:Name="MenuItem_SaveSession" ToolTip="Persists list of loaded Playlists through different sessions" IsChecked="True" />
