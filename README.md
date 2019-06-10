@@ -31,7 +31,7 @@ It's mostly something I modifed/created for my own use, but others might find it
 - [ ] Allow directly specifying an icon for a playlist
 - [ ] Remember last category/playlist on startup
 - [ ] Better looking Text Prompts
-- [ ] Default pwad list to load with any playlist
+- [ ] Default pwad list to load with any playlist? A load-last list?
 - [X] Add direct Config/Save Directory settings 
   - They are present, but they are only setup to work with GZDoom for now, so are disabled/hidden by default
     - Can enable by adding the following to your YADL.cfg:
