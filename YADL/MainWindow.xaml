@@ -128,7 +128,7 @@
                         </TabControl>
                     </StackPanel>
 
-                    <ListView ContextMenu="{StaticResource ListPlaylist_ContextMenu}" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Playlist}" x:Name="ListView_Playlists" dd:DragDrop.DragDropContext="Playlist" SelectionChanged="ListView_Playlists_SelectionChanged" AllowDrop="True" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Margin="1 0 3 0" Grid.ColumnSpan="2">
+                    <ListView ContextMenu="{StaticResource ListPlaylist_ContextMenu}" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Playlist}" x:Name="ListView_Playlists" SelectionChanged="ListView_Playlists_SelectionChanged" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" Margin="1 0 3 0" Grid.ColumnSpan="2">
                         <ListView.Resources>
                             <ContextMenu x:Key="ItemContextMenu">
                                 <MenuItem Header="Save..." Click="MenuItem_PlaylistSave_Click"/>
@@ -349,7 +349,7 @@
 
                     </Grid>
 
-                    <ListView ContextMenu="{StaticResource ListPwad_ContextMenu}" ItemsSource="{Binding SelectedItem.Wadlist, ElementName=ListView_Playlists}" dd:DragDrop.DragDropContext="Wadlist" x:Name="ListView_Pwads" SelectionChanged="ListView_Pwads_SelectionChanged" AllowDrop="True" Drop="ListView_Pwads_Drop" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" Grid.Row="1" BorderThickness="1" Margin="3 1 3 0" MouseDoubleClick="ListView_Pwads_MouseDoubleClick" PreviewKeyDown="ListView_Pwads_KeyUp">
+                    <ListView ContextMenu="{StaticResource ListPwad_ContextMenu}" ItemsSource="{Binding SelectedItem.Wadlist, ElementName=ListView_Playlists}" Name="ListView_Pwads" SelectionChanged="ListView_Pwads_SelectionChanged" dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}" Grid.Row="1" BorderThickness="1" Margin="3 1 3 0" MouseDoubleClick="ListView_Pwads_MouseDoubleClick" PreviewKeyDown="ListView_Pwads_KeyUp">
                         <ListView.Resources>
                             <ContextMenu x:Key="HeaderContextMenu">
                                 <MenuItem x:Name="ColumnLoad_View_Toggle" Header="Load" IsCheckable="True" IsChecked="True" Click="ColumnLoad_View_Toggle_Click"/>

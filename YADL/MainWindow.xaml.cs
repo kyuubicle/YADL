@@ -10,13 +10,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 //using System.Windows.Input;
+using GongSolutions.Wpf.DragDrop;
 
 namespace YADL
 {
     public partial class MainWindow : Window
     {
-        ViewModel VM = new ViewModel();
+        PlaylistViewModel VM = new PlaylistViewModel();
         Dictionary<string, string> Parameters = new Dictionary<string, string>();
+        private string[] validPWadFileExtensions = { ".wad", ".pk3", ".pk7", ".deh" };
         string Settings_File = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "YADL.cfg");
         string Folder_Playlists_New = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Playlists");
         string Folder_Playlists_Import = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Playlists");
@@ -55,7 +57,9 @@ namespace YADL
         public MainWindow()
         {
             InitializeComponent();
+
             DataContext = VM;
+            VM.window = this;
 
             UserCategories = new ObservableCollection<string>();
             ListView_Playlist_ContextMenu = (ContextMenu)this.Resources["ListPlaylist_ContextMenu"];
@@ -465,14 +469,6 @@ namespace YADL
             ((Playlists)ListView_Playlists.SelectedItem).Playlist_Changed = true;
         }
 
-        private void ListView_Pwads_Drop(object sender, DragEventArgs e)
-        {
-            if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Files > 1)
-            {
-                ((Playlists)ListView_Playlists.SelectedItem).Playlist_Changed = true;
-            }
-        }
-
         private void ProgressBar_Load_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             TextBlock_Load.Visibility = (ProgressBar_Load.Value == 0 | ProgressBar_Load.Value == 100) ? Visibility.Collapsed : Visibility.Visible;
@@ -522,7 +518,7 @@ namespace YADL
             Helper_Settings_Write();
         }
 
-        private async void Helper_Playlists(List<string> Files)
+        public async void Helper_Playlists(List<string> Files)
         {
             Playlists Playlist = null;
 
@@ -626,18 +622,21 @@ namespace YADL
             Helper_UI();
         }
 
-        private void Helper_Pwads(List<string> Files)
+        public void Helper_Pwads(List<string> Files)
         {
             foreach (var File in Files)
             {
-                var Duplicate = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.SingleOrDefault(x => (x.Wad_File.ToLower() == Path.GetFileName(File).ToLower() & x.Wad_Location.ToLower() == Path.GetDirectoryName(File).ToLower()));
-                if (Duplicate == null)
+                if(validPWadFileExtensions.Contains<string>(Path.GetExtension(File)))
                 {
-                    Wads Pwad = new Wads(true, true, Path.GetFileName(File), false, Path.GetDirectoryName(File));
-                    ((Playlists)ListView_Playlists.SelectedItem).Wadlist.Add(Pwad);
+                    var Duplicate = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.SingleOrDefault(x => (x.Wad_File.ToLower() == Path.GetFileName(File).ToLower() & x.Wad_Location.ToLower() == Path.GetDirectoryName(File).ToLower()));
+                    if (Duplicate == null)
+                    {
+                        Wads Pwad = new Wads(true, true, Path.GetFileName(File), false, Path.GetDirectoryName(File));
+                        ((Playlists)ListView_Playlists.SelectedItem).Wadlist.Add(Pwad);
+                    }
                 }
+                ((Playlists)ListView_Playlists.SelectedItem).Playlist_Files = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.Count;
             }
-            ((Playlists)ListView_Playlists.SelectedItem).Playlist_Files = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.Count;
             Helper_UI();
         }
 
@@ -1690,5 +1689,9 @@ namespace YADL
 
             Process.Start(path);
         }
+
     }
+
+
+
 }

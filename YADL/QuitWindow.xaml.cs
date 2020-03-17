@@ -8,7 +8,7 @@ namespace YADL
 {
     public partial class QuitWindow : Window
     {
-        ViewModel VM_Save = new ViewModel();
+        PlaylistViewModel VM_Save = new PlaylistViewModel();
 
         public QuitWindow(object Data)
         {
