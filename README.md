@@ -7,6 +7,7 @@ It's based off of the source of another launcher: [Doomie.](https://forum.zdoom.
 It's mostly something I modifed/created for my own use, but others might find it useful!
 
 # What's new from Doomie 1.7?
+- Can drop files into both the Playlist (\*.dpf) and pwads (\*.wad, \*.iwad, \*.pk3, \*.pk7, \*.deh).
 - When Creating a New Playlist or Opening a single playlist, that playlist will be automatically selected.
   - No playlist will be selected when *importing* a directory of playlists.
 - Can launch a playlist by double-clicking
@@ -20,14 +21,16 @@ It's mostly something I modifed/created for my own use, but others might find it
 - Wads can be loaded/unloaded by double-clicking them.
 - Wads can also be loaded/unloaded by pressing the spacebar or enter key while selected (useful for loading/unloading groups of items)
 - Text indicates the status of the Pwad:
- 	- Bold - Will be Loaded
-  - Red and Italic - File missing
+ 	- Normal - won't be loaded
+  - Bold - will be Loaded
+  - Red and Italic - file missing
 - Changed UI a bit:
   - Context Menus on Playlist list and Pwad list themselves (as well as the individual elements)
   -	Uses a Menu instead of buttons for basic Playlist controls
   -	Play Button is now above the PWAD list, below the port/iwad/category options.
 
 # TODO
+- [X] File drop suport
 - [ ] Allow directly specifying an icon for a playlist
 - [ ] Remember last category/playlist on startup
 - [ ] Better looking Text Prompts
