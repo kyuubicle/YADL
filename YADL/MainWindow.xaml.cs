@@ -18,7 +18,7 @@ namespace YADL
     {
         PlaylistViewModel VM = new PlaylistViewModel();
         Dictionary<string, string> Parameters = new Dictionary<string, string>();
-        private string[] validPWadFileExtensions = { ".wad", ".pk3", ".pk7", ".deh" };
+        private string[] validPWadFileExtensions = { ".wad", ".iwad", ".pk3", ".pk7", ".deh" };
         string Settings_File = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "YADL.cfg");
         string Folder_Playlists_New = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Playlists");
         string Folder_Playlists_Import = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Playlists");
