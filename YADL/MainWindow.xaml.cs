@@ -31,6 +31,8 @@ namespace YADL
         string Folder_Config_Open = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config");
 
         ObservableCollection<string> UserCategories;
+        int LastCategorySelected = 0;
+        Dictionary<int, int> LastPlaylistSelected = new Dictionary<int, int>();
 
         bool PWadList_LoadColumn_Visible = true;
         bool PWadList_MergeColumn_Visible = true;
@@ -91,15 +93,40 @@ namespace YADL
                 Helper_Settings_Write();
             }
 
-
             if (UserCategories.Count() > 0)
             {
                 Categories_Changed = true;
             }
 
-            Helper_UI();
+            tabControl.SelectedIndex = LastCategorySelected;
+
+            Helper_Filter();
+            TryApplyStartupSettings();
         }
 
+        private async void TryApplyStartupSettings()
+        {
+            try
+            {
+                if (LastPlaylistSelected.ContainsKey(tabControl.SelectedIndex))
+                {
+                    if (ListView_Playlists.Items.Contains(VM.Playlist[LastPlaylistSelected[tabControl.SelectedIndex]]))
+                    {
+                        ListView_Playlists.SelectedIndex = ListView_Playlists.Items.IndexOf(VM.Playlist[LastPlaylistSelected[tabControl.SelectedIndex]]);
+                    }
+                    else
+                    {
+                        ListView_Playlists.SelectedIndex = -1;
+                    }
+                }
+            }
+            catch
+            {
+                await Task.Delay(5);
+                TryApplyStartupSettings();
+            }
+        }
+        
         private void MenuItem_PlaylistNew_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog Playlist_New_File = new SaveFileDialog
@@ -115,11 +142,11 @@ namespace YADL
                 Playlists Playlist = new Playlists(true, false, Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), Path.GetFileNameWithoutExtension(Playlist_New_File.FileName), 0, Path.GetDirectoryName(Playlist_New_File.FileName), "", false, "", "");
 
                 //Adds the current category to the new item
-                if(((TabItem)tabControl.SelectedItem).Header.ToString() != "All")
+                if (((TabItem)tabControl.SelectedItem).Header.ToString() != "All")
                 {
                     Playlist.Playlist_Categories.Add(((TabItem)tabControl.SelectedItem).Header.ToString());
                 }
-                
+
                 var Duplicate = VM.Playlist.SingleOrDefault(x => (x.Playlist_FileName.ToLower() == Path.GetFileNameWithoutExtension(Playlist_New_File.FileName).ToLower() & x.Playlist_Location.ToLower() == Path.GetDirectoryName(Playlist_New_File.FileName).ToLower()));
                 if (Duplicate != null)
                 {
@@ -198,7 +225,7 @@ namespace YADL
                 };
                 if (Playlist_Save_As_File.ShowDialog() == true)
                 {
-                    Playlists Playlist = new Playlists(false, false, Playlist_Selected.Playlist_Name, 
+                    Playlists Playlist = new Playlists(false, false, Playlist_Selected.Playlist_Name,
                         Path.GetFileNameWithoutExtension(Playlist_Save_As_File.FileName),
                         Playlist_Selected.Playlist_Files,
                         Path.GetDirectoryName(Playlist_Save_As_File.FileName),
@@ -625,7 +652,7 @@ namespace YADL
         {
             foreach (var File in Files)
             {
-                if(validPWadFileExtensions.Contains<string>(Path.GetExtension(File).ToLower()))
+                if (validPWadFileExtensions.Contains<string>(Path.GetExtension(File).ToLower()))
                 {
                     var Duplicate = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.SingleOrDefault(x => (x.Wad_File.ToLower() == Path.GetFileName(File).ToLower() & x.Wad_Location.ToLower() == Path.GetDirectoryName(File).ToLower()));
                     if (Duplicate == null)
@@ -679,11 +706,11 @@ namespace YADL
 
             if (Playlist.Playlist_HasSavedir == true)
                 Dpf.Write("Enable", Playlist.Playlist_HasConfig.ToString(), "Savedir");
-            if(!String.IsNullOrEmpty(Playlist.Playlist_Savedir))
+            if (!String.IsNullOrEmpty(Playlist.Playlist_Savedir))
                 Dpf.Write("Path", Playlist.Playlist_Savedir.ToString(), "Savedir");
 
             Dpf.Write("Counter", Playlist.Playlist_Categories.Count().ToString(), "Categories");
-            for(int i = 0; i < Playlist.Playlist_Categories.Count(); i++)
+            for (int i = 0; i < Playlist.Playlist_Categories.Count(); i++)
             {
                 Dpf.Write("Category" + (i + 1).ToString(), Playlist.Playlist_Categories[i], "Categories");
             }
@@ -728,9 +755,9 @@ namespace YADL
             Folder_PWads_Import = Settings.Read("PWads_Import", "Paths");
             Folder_PWads_Open = Settings.Read("PWads_Open", "Paths");
 
-            if(Settings.KeyExists("Config_Open","Paths"))
+            if (Settings.KeyExists("Config_Open", "Paths"))
                 Folder_Config_Open = Settings.Read("Config_Open", "Paths");
-            if(Settings.KeyExists("Savedir_Open","Paths"))
+            if (Settings.KeyExists("Savedir_Open", "Paths"))
                 Folder_Savedir_Open = Settings.Read("Savedir_Open", "Paths");
 
             if (Settings.KeyExists("PWad_List_Location_Visible", "Options"))
@@ -782,7 +809,26 @@ namespace YADL
                 }
             }
 
-            if (!Settings.KeyExists("Config","Hidden_Features"))
+            if (Settings.KeyExists("LastSelectedCategory", "LastSelected"))
+                LastCategorySelected = Int32.Parse(Settings.Read("LastSelectedCategory", "LastSelected"));
+
+            if (Settings.KeyExists("Counter", "LastSelected"))
+            {
+                int j = Int32.Parse(Settings.Read("Counter", "LastSelected"));
+
+                for (int i = 0; i < j; i++)
+                {
+                    int key = Int32.Parse(Settings.Read("LastSelectedKey" + (i + 1).ToString(), "LastSelected"));
+                    int val = Int32.Parse(Settings.Read("LastSelectedVal" + (i + 1).ToString(), "LastSelected"));
+
+                    //MessageBox.Show("Fart: " + key.ToString() + val.ToString());
+                    if (LastPlaylistSelected == null)
+                        LastPlaylistSelected = new Dictionary<int, int>();
+                    LastPlaylistSelected.Add(key, val);
+                }
+            }
+
+            if (!Settings.KeyExists("Config", "Hidden_Features"))
             {
                 LabelConfig.Visibility = Visibility.Hidden;
                 RowConfig.Visibility = Visibility.Hidden;
@@ -822,24 +868,24 @@ namespace YADL
             switch (WindowState)
             {
                 case (WindowState.Maximized):
-                {
-                    Settings.Write("Maximized", "True", "Window Settings");
-                    break;
-                }
+                    {
+                        Settings.Write("Maximized", "True", "Window Settings");
+                        break;
+                    }
                 case (WindowState.Minimized):
-                {
-                    Settings.Write("Maximized", "False", "Window Settings");
-                    Settings.Write("Width", Width.ToString(), "Window Settings");
-                    Settings.Write("Height", Height.ToString(), "Window Settings");
-                    break;
-                }
+                    {
+                        Settings.Write("Maximized", "False", "Window Settings");
+                        Settings.Write("Width", Width.ToString(), "Window Settings");
+                        Settings.Write("Height", Height.ToString(), "Window Settings");
+                        break;
+                    }
                 case (WindowState.Normal):
-                {
-                    Settings.Write("Maximized", "False", "Window Settings");
-                    Settings.Write("Width", Width.ToString(), "Window Settings");
-                    Settings.Write("Height", Height.ToString(), "Window Settings");
-                    break;
-                }
+                    {
+                        Settings.Write("Maximized", "False", "Window Settings");
+                        Settings.Write("Width", Width.ToString(), "Window Settings");
+                        Settings.Write("Height", Height.ToString(), "Window Settings");
+                        break;
+                    }
             }
             Settings.Write("X_Position", Left.ToString(), "Window Settings");
             Settings.Write("Y_Position", Top.ToString(), "Window Settings");
@@ -871,6 +917,21 @@ namespace YADL
                 }
             }
 
+            Settings.Write("LastSelectedCategory", tabControl.SelectedIndex.ToString(), "LastSelected");
+            if (LastPlaylistSelected.Count() > 0)
+            {
+                Settings.Write("Counter", LastPlaylistSelected.Count().ToString(), "LastSelected");
+
+                int i = 0;
+
+                foreach (KeyValuePair<int, int> keyval in LastPlaylistSelected)
+                {
+                    i++;
+                    Settings.Write("LastSelectedKey" + i.ToString(), keyval.Key.ToString(), "LastSelected");
+                    Settings.Write("LastSelectedVal" + i.ToString(), keyval.Value.ToString(), "LastSelected");
+                }
+            }
+
             if (MenuItem_SaveSession.IsChecked)
             {
                 Settings.DeleteSection("Playlists");
@@ -887,14 +948,18 @@ namespace YADL
 
         private void Helper_UI() //Manages everything to do with enabling/disabling/controlling UI elements.
         {
+            if (ListView_Playlists.SelectedItems.Count == 1 && tabControl.SelectedIndex != 0)
+                LastPlaylistSelected[tabControl.SelectedIndex] = VM.Playlist.IndexOf(((Playlists)ListView_Playlists.SelectedItem));
+
+
             //Manage the Category ComboBox and ContextMenu submenu.
-            if(Categories_Changed)
+            if (Categories_Changed)
             {
                 //Prevents the SelectedItemsChanged event from firing and calling Helper_UI again and again and again an. . .
                 Categories_Frozen = true;
 
                 //Um, sometimes these would sneak into the Categories list, so this just removes them so they don't become duplicate tabs.
-                while(UserCategories.Contains("All"))
+                while (UserCategories.Contains("All"))
                 {
                     UserCategories.Remove("All");
                 }
@@ -950,7 +1015,7 @@ namespace YADL
                 PwadList_MergeColumn.Width = Double.NaN;
             }
             else
-            { 
+            {
                 PwadList_MergeColumn.Width = 0;
             }
             if (PWadList_LocationColumn_Visible)
@@ -959,7 +1024,7 @@ namespace YADL
                 PwadList_LocationColumn.Width = Double.NaN;
             }
             else
-            { 
+            {
                 PwadList_LocationColumn.Width = 0;
             }
 
@@ -1062,7 +1127,7 @@ namespace YADL
 
                 CheckBox_Config.IsEnabled = true;
                 CheckBox_SaveDir.IsEnabled = true;
-                
+
                 ListView_Pwads.IsEnabled = true;
                 //Context Menus and Buttons for managing playlists
                 //Button_Pwad_Clear.IsEnabled = true; <--- Handled below
@@ -1107,7 +1172,7 @@ namespace YADL
 
                     for (int i = 0; i < UserCategories.Count; i++)
                     {
-                        if(((Playlists)ListView_Playlists.SelectedItem).Playlist_Categories.Contains(UserCategories[i]))
+                        if (((Playlists)ListView_Playlists.SelectedItem).Playlist_Categories.Contains(UserCategories[i]))
                         {
                             ComboBox_Categories.SelectedItems.Add(UserCategories[i]);
                         }
@@ -1120,7 +1185,7 @@ namespace YADL
 
                     Categories_Frozen = false;
                 }
-                  
+
             }
             else
             {
@@ -1150,7 +1215,7 @@ namespace YADL
 
                 TextBox_PWad_Filter.IsEnabled = false;
 
-                if(UserCategories.Count > 0)
+                if (UserCategories.Count > 0)
                 {
                     CategoryHeader.IsEnabled = true;
 
@@ -1311,7 +1376,7 @@ namespace YADL
         private void TabControl_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             TabItem ti = tabControl.SelectedItem as TabItem;
-            
+
             if (ti.Header.ToString() == "+")
             {
                 string promptValue = Microsoft.VisualBasic.Interaction.InputBox("Category: ", "Enter name for new category (leave blank to cancel)");
@@ -1321,12 +1386,12 @@ namespace YADL
                     MessageBox.Show("Cannot name a new category \"+\" or \"All\"");
                     //Forces the 'All' category tab to be selected if a new category is not added
                     //TODO: Maybe return to the previous selected tab somehow?
-                    tabControl.SelectedIndex = 0;
+                    tabControl.SelectedIndex = LastCategorySelected;
                 }
                 else if (promptValue != "")
                 {
-                    
-                    if(!UserCategories.Contains(promptValue))
+
+                    if (!UserCategories.Contains(promptValue))
                     {
                         if (UserCategories == null)
                         {
@@ -1349,19 +1414,33 @@ namespace YADL
                         MessageBox.Show("Category " + promptValue + " already exists.");
                         //Forces the 'All' category tab to be selected if a new category is not added
                         //TODO: Maybe return to the previous selected tab somehow?
-                        tabControl.SelectedIndex = 0;
+                        tabControl.SelectedIndex = LastCategorySelected;
                     }
-                    
+
                 }
                 else
                 {
                     //Forces the 'All' category tab to be selected if a new category is not added
                     //TODO: Maybe return to the previous selected tab somehow?
-                    tabControl.SelectedIndex = 0;
+                    tabControl.SelectedIndex = LastCategorySelected;
                 }
             }
 
             Helper_Filter();
+
+            LastCategorySelected = tabControl.SelectedIndex;
+
+            if (LastPlaylistSelected.ContainsKey(tabControl.SelectedIndex))
+            {
+                if (ListView_Playlists.Items.Contains(VM.Playlist[LastPlaylistSelected[tabControl.SelectedIndex]]))
+                {
+                    ListView_Playlists.SelectedIndex = ListView_Playlists.Items.IndexOf(VM.Playlist[LastPlaylistSelected[tabControl.SelectedIndex]]);
+                }
+                else
+                {
+                    ListView_Playlists.SelectedIndex = -1;
+                }
+            }
         }
 
         private void Helper_Filter()
@@ -1415,7 +1494,7 @@ namespace YADL
                     //but... only IF the category exists in the combobox at all.
                     for (int i = 0; i < PlaylistCategories.Count; i++)
                     {
-                        if(ComboBox_Categories.Items.Contains(PlaylistCategories[i]))
+                        if (ComboBox_Categories.Items.Contains(PlaylistCategories[i]))
                         {
                             if (!ComboBox_Categories.SelectedItems.Contains(PlaylistCategories[i]))
                             {
@@ -1473,7 +1552,7 @@ namespace YADL
 
         private void ListView_Pwads_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Delete)
+            if (e.Key == System.Windows.Input.Key.Delete)
             {
                 var Selected_Pwads = ListView_Pwads.SelectedItems.Cast<object>().ToList();
                 foreach (Wads Pwad in Selected_Pwads)
@@ -1514,8 +1593,19 @@ namespace YADL
             if (tabTarget.Header.ToString() == "All" || tabTarget.Header.ToString() == "+")
                 return;
 
+            int i = LastCategorySelected;
+
             UserCategories.Remove(tabSource.Header.ToString());
             UserCategories.Insert(tabControl.Items.IndexOf(tabTarget) - 1, tabSource.Header.ToString());
+
+            LastCategorySelected = tabControl.Items.IndexOf(tabSource);
+
+            if (LastPlaylistSelected.ContainsKey(i))
+            {
+                int p = LastPlaylistSelected[i];
+                LastPlaylistSelected.Remove(i);
+                LastPlaylistSelected.Add(LastCategorySelected, p);
+            }
 
             Categories_Changed = true;
 
@@ -1525,7 +1615,7 @@ namespace YADL
 
         private void ItemContextMenu_Playlists_Rename_Click(object sender, RoutedEventArgs e)
         {
-            var promptResponse = Microsoft.VisualBasic.Interaction.InputBox("Playlist Name: ", 
+            var promptResponse = Microsoft.VisualBasic.Interaction.InputBox("Playlist Name: ",
                 "Enter a new name for playlist (leave blank to cancel)",
                 ((Playlists)ListView_Playlists.SelectedItem).Playlist_Name);
 
@@ -1540,8 +1630,13 @@ namespace YADL
 
         private void ContextItem_RemoveCategory_Click(object sender, RoutedEventArgs e)
         {
-            if(tabControl.SelectedIndex != 0 && tabControl.SelectedIndex != tabControl.Items.Count - 1)
+            if (tabControl.SelectedIndex != 0 && tabControl.SelectedIndex != tabControl.Items.Count - 1)
             {
+                if (LastPlaylistSelected.ContainsKey(tabControl.SelectedIndex))
+                {
+                    LastPlaylistSelected.Remove(tabControl.SelectedIndex);
+                }
+
                 UserCategories.Remove(((TabItem)tabControl.SelectedItem).Header.ToString());
 
                 tabControl.Items.Remove(tabControl.Items[tabControl.SelectedIndex]);
@@ -1574,19 +1669,19 @@ namespace YADL
 
         private void ContextItem_RenameCategory_Click(object sender, RoutedEventArgs e)
         {
-            string promptValue = Microsoft.VisualBasic.Interaction.InputBox("Category Name: ", "Enter a new name for Category (leave blank to cancel)", UserCategories[UserCategories.IndexOf(((TabItem)tabControl.SelectedItem).Header.ToString())]);
+            string promptValue = Microsoft.VisualBasic.Interaction.InputBox("Category Name: ", "Enter a new name for Category (leave blank to cancel)", ((TabItem)tabControl.SelectedItem).Header.ToString());
 
-            if(promptValue != "")
+            if (promptValue != "")
             {
                 UserCategories[UserCategories.IndexOf(((TabItem)tabControl.SelectedItem).Header.ToString())] = promptValue;
 
                 ListView_Playlists.Items.Filter = null;
 
-                for(int i = 0; i < ListView_Playlists.Items.Count; i++)
+                for (int i = 0; i < ListView_Playlists.Items.Count; i++)
                 {
                     Playlists p = ListView_Playlists.Items[i] as Playlists;
 
-                    if(p.Playlist_Categories.Contains(((TabItem)tabControl.SelectedItem).Header.ToString()))
+                    if (p.Playlist_Categories.Contains(((TabItem)tabControl.SelectedItem).Header.ToString()))
                     {
                         p.Playlist_Categories[p.Playlist_Categories.IndexOf(((TabItem)tabControl.SelectedItem).Header.ToString())] = promptValue;
                     }
@@ -1675,9 +1770,9 @@ namespace YADL
 
         private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if(ListView_Playlists.SelectedItems.Count == 1)
+            if (ListView_Playlists.SelectedItems.Count == 1)
             {
-                if(Button_Play.IsEnabled)
+                if (Button_Play.IsEnabled)
                 {
                     Helper_Launch();
                 }
@@ -1690,9 +1785,5 @@ namespace YADL
 
             Process.Start(path);
         }
-
     }
-
-
-
 }
