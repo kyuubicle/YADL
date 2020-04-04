@@ -55,6 +55,7 @@
     <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.2.0.1\lib\net46\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -98,7 +99,6 @@
     <Compile Include="QuitWindow.xaml.cs">
       <DependentUpon>QuitWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextPrompt.cs" />
     <Compile Include="PlaylistViewModel.cs" />
     <Compile Include="Wads.cs" />
     <Page Include="AboutWindow.xaml">

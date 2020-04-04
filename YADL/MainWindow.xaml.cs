@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-//using System.Windows.Input;
 using GongSolutions.Wpf.DragDrop;
 
 namespace YADL
@@ -626,7 +625,7 @@ namespace YADL
         {
             foreach (var File in Files)
             {
-                if(validPWadFileExtensions.Contains<string>(Path.GetExtension(File)))
+                if(validPWadFileExtensions.Contains<string>(Path.GetExtension(File).ToLower()))
                 {
                     var Duplicate = ((Playlists)ListView_Playlists.SelectedItem).Wadlist.SingleOrDefault(x => (x.Wad_File.ToLower() == Path.GetFileName(File).ToLower() & x.Wad_Location.ToLower() == Path.GetDirectoryName(File).ToLower()));
                     if (Duplicate == null)
@@ -1315,7 +1314,7 @@ namespace YADL
             
             if (ti.Header.ToString() == "+")
             {
-                string promptValue = Prompt.ShowDialog("Category: ", "Enter name for new category (leave blank to cancel)");
+                string promptValue = Microsoft.VisualBasic.Interaction.InputBox("Category: ", "Enter name for new category (leave blank to cancel)");
 
                 if (promptValue == "+" || promptValue == "All")
                 {
@@ -1526,7 +1525,9 @@ namespace YADL
 
         private void ItemContextMenu_Playlists_Rename_Click(object sender, RoutedEventArgs e)
         {
-            var promptResponse = Prompt.ShowDialog("Playlist Name: ", "Enter a new name for playlist (leave blank to cancel)");
+            var promptResponse = Microsoft.VisualBasic.Interaction.InputBox("Playlist Name: ", 
+                "Enter a new name for playlist (leave blank to cancel)",
+                ((Playlists)ListView_Playlists.SelectedItem).Playlist_Name);
 
             if (promptResponse != "")
             {
@@ -1573,7 +1574,7 @@ namespace YADL
 
         private void ContextItem_RenameCategory_Click(object sender, RoutedEventArgs e)
         {
-            string promptValue = Prompt.ShowDialog("Category Name: ", "Enter a new name for Category (leave blank to cancel)");
+            string promptValue = Microsoft.VisualBasic.Interaction.InputBox("Category Name: ", "Enter a new name for Category (leave blank to cancel)", UserCategories[UserCategories.IndexOf(((TabItem)tabControl.SelectedItem).Header.ToString())]);
 
             if(promptValue != "")
             {

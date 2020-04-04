@@ -61,7 +61,7 @@ namespace YADL
 
         private void HandleDropActionAsync(IDropInfo dropInfo, StringCollection stringCollection)
         {
-
+            //There *has* to be a better way to get this info.
             if (dropInfo.TargetCollection.GetType().ToString() == this.Playlist.GetType().ToString())
             {
                 List<string> files = new List<string>();
